@@ -1,0 +1,59 @@
+# ── Python / Backend
+venv/
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environment
+backend/.env
+.env
+.env.local
+.env.*.local
+
+# Data & indexes — never commit these (too large + rebuiltable)
+backend/data/index/faiss.index
+backend/data/index/chunks.pkl
+backend/data/index/bm25.pkl
+backend/data/index/embed_checkpoint.json
+
+# PDFs — too large for git
+backend/data/raw/*.pdf
+
+# JSONL source data — optional, keep if small enough (~5MB ok)
+# backend/law_chunks.jsonl
+# backend/law_chunks_v2.jsonl
+
+# Database
+*.db
+*.sqlite3
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# ── Node / Frontend ───────────────────────────────────────────────
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+# Vite cache
+frontend/.vite/
+
+# ── Editor ────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Logs ─────────────────────────────────────────────────────────
+*.log
+npm-debug.log*
+
+# ── OS ───────────────────────────────────────────────────────────
+Thumbs.db
