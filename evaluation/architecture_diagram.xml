@@ -1,0 +1,264 @@
+<mxfile>
+  <diagram name="System Architecture">
+    <mxGraphModel dx="1200" dy="800" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ══ TITLE ══ -->
+        <mxCell id="title"
+          value="System Architecture"
+          style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=18;fontStyle=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="360" y="20" width="320" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════
+             PRESENTATION LAYER
+        ══════════════════════════════════════════ -->
+        <mxCell id="presLayer"
+          value="&lt;b&gt;Presentation Layer&lt;/b&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontStyle=1;verticalAlign=top;spacingTop=8;"
+          vertex="1" parent="1">
+          <mxGeometry x="80" y="80" width="600" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="chatUI"
+          value="&lt;b&gt;Chat Interface&lt;/b&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=12;"
+          vertex="1" parent="1">
+          <mxGeometry x="110" y="115" width="160" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="citUI"
+          value="&lt;b&gt;Citation Display&lt;/b&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=12;"
+          vertex="1" parent="1">
+          <mxGeometry x="320" y="115" width="160" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pdfUI"
+          value="&lt;b&gt;PDF Viewer&lt;/b&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=12;"
+          vertex="1" parent="1">
+          <mxGeometry x="500" y="115" width="150" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="presTech"
+          value="React"
+          style="text;html=1;strokeColor=none;fillColor=none;align=right;fontSize=10;fontStyle=2;fontColor=#36577f;"
+          vertex="1" parent="1">
+          <mxGeometry x="560" y="84" width="110" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════
+             APPLICATION LAYER
+        ══════════════════════════════════════════ -->
+        <mxCell id="appLayer"
+          value="&lt;b&gt;Application Layer&lt;/b&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;fontStyle=1;verticalAlign=top;spacingTop=8;"
+          vertex="1" parent="1">
+          <mxGeometry x="80" y="240" width="600" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="apiGateway"
+          value="&lt;b&gt;REST API Gateway&lt;/b&gt;&lt;br&gt;Chat · Session · History · Documents"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=12;"
+          vertex="1" parent="1">
+          <mxGeometry x="180" y="270" width="400" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="appTech"
+          value="FastAPI"
+          style="text;html=1;strokeColor=none;fillColor=none;align=right;fontSize=10;fontStyle=2;fontColor=#3a6b35;"
+          vertex="1" parent="1">
+          <mxGeometry x="570" y="244" width="100" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════
+             AGENT LAYER (Agentic RAG Pipeline)
+        ══════════════════════════════════════════ -->
+        <mxCell id="agentLayer"
+          value="&lt;b&gt;Agentic RAG Pipeline&lt;/b&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;fontStyle=1;verticalAlign=top;spacingTop=8;"
+          vertex="1" parent="1">
+          <mxGeometry x="80" y="380" width="600" height="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="n1"
+          value="&lt;b&gt;Intent&lt;br&gt;Classification&lt;/b&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;fontSize=11;"
+          vertex="1" parent="1">
+          <mxGeometry x="100" y="425" width="100" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="n2"
+          value="&lt;b&gt;Query&lt;br&gt;Rewriting&lt;/b&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;fontSize=11;"
+          vertex="1" parent="1">
+          <mxGeometry x="215" y="425" width="100" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="n3"
+          value="&lt;b&gt;Hybrid&lt;br&gt;Retrieval&lt;/b&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;fontSize=11;"
+          vertex="1" parent="1">
+          <mxGeometry x="330" y="425" width="100" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="n4"
+          value="&lt;b&gt;Grounding&lt;br&gt;Check&lt;/b&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;fontSize=11;"
+          vertex="1" parent="1">
+          <mxGeometry x="445" y="425" width="100" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="n5"
+          value="&lt;b&gt;Answer&lt;br&gt;Generation&lt;/b&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d6b656;fontSize=11;"
+          vertex="1" parent="1">
+          <mxGeometry x="560" y="425" width="100" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="agentTech"
+          value="LangGraph"
+          style="text;html=1;strokeColor=none;fillColor=none;align=right;fontSize=10;fontStyle=2;fontColor=#9a7d1a;"
+          vertex="1" parent="1">
+          <mxGeometry x="550" y="384" width="120" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- pipeline arrows -->
+        <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=classic;" edge="1" source="n1" target="n2" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=classic;" edge="1" source="n2" target="n3" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=classic;" edge="1" source="n3" target="n4" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e45" style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=classic;" edge="1" source="n4" target="n5" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- retry loop n4 -> n2 -->
+        <mxCell id="eretry"
+          value="retry"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#d32f2f;fontColor=#d32f2f;fontSize=10;endArrow=classic;exitX=0.5;exitY=0;entryX=0.5;entryY=0;"
+          edge="1" source="n4" target="n2" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="495" y="410" />
+              <mxPoint x="265" y="410" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════
+             DATA LAYER
+        ══════════════════════════════════════════ -->
+        <mxCell id="dataLayer"
+          value="&lt;b&gt;Data Layer&lt;/b&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;fontSize=13;fontStyle=1;verticalAlign=top;spacingTop=8;"
+          vertex="1" parent="1">
+          <mxGeometry x="80" y="560" width="600" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="vectorDB"
+          value="&lt;b&gt;Vector Index&lt;/b&gt;&lt;br&gt;FAISS"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;fontSize=11;"
+          vertex="1" parent="1">
+          <mxGeometry x="105" y="595" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="keywordDB"
+          value="&lt;b&gt;Keyword Index&lt;/b&gt;&lt;br&gt;BM25"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;fontSize=11;"
+          vertex="1" parent="1">
+          <mxGeometry x="245" y="595" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="docStore"
+          value="&lt;b&gt;Knowledge Base&lt;/b&gt;&lt;br&gt;622 Legal Articles"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;fontSize=11;"
+          vertex="1" parent="1">
+          <mxGeometry x="385" y="595" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sqlDB"
+          value="&lt;b&gt;Chat History&lt;/b&gt;&lt;br&gt;PostgreSQL"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;fontSize=11;"
+          vertex="1" parent="1">
+          <mxGeometry x="535" y="595" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════
+             AI SERVICE LAYER (right)
+        ══════════════════════════════════════════ -->
+        <mxCell id="aiLayer"
+          value="&lt;b&gt;AI Service Layer&lt;/b&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;fontStyle=1;verticalAlign=top;spacingTop=8;"
+          vertex="1" parent="1">
+          <mxGeometry x="760" y="380" width="320" height="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="llmModel"
+          value="&lt;b&gt;Gemini 2.5 Flash&lt;/b&gt;&lt;br&gt;Generation &amp; Reasoning"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;fontSize=11;"
+          vertex="1" parent="1">
+          <mxGeometry x="785" y="420" width="130" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="embedModel"
+          value="&lt;b&gt;Gemini Embedding&lt;/b&gt;&lt;br&gt;Text Embeddings"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;fontSize=11;"
+          vertex="1" parent="1">
+          <mxGeometry x="930" y="420" width="130" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="aiTech"
+          value="Google Vertex AI"
+          style="text;html=1;strokeColor=none;fillColor=none;align=right;fontSize=10;fontStyle=2;fontColor=#6a3fa0;"
+          vertex="1" parent="1">
+          <mxGeometry x="940" y="384" width="130" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════
+             LAYER CONNECTIONS
+        ══════════════════════════════════════════ -->
+
+        <mxCell id="c_pres_app"
+          value="HTTP / SSE"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;startArrow=classic;endArrow=classic;strokeWidth=2;fontSize=11;"
+          edge="1" source="presLayer" target="appLayer" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_app_agent"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;startArrow=classic;endArrow=classic;strokeWidth=2;"
+          edge="1" source="appLayer" target="agentLayer" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_agent_data"
+          value="retrieve"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;startArrow=classic;endArrow=classic;strokeWidth=2;fontSize=11;"
+          edge="1" source="agentLayer" target="dataLayer" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="c_agent_ai"
+          value="LLM API calls"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;startArrow=classic;endArrow=classic;strokeWidth=2;fontSize=11;strokeColor=#9673a6;fontColor=#6a3fa0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;"
+          edge="1" source="agentLayer" target="aiLayer" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- App → DB (chat history) -->
+        <mxCell id="c_app_sql"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;startArrow=classic;endArrow=classic;dashed=1;strokeColor=#999999;exitX=1;exitY=0.5;entryX=0.5;entryY=0;"
+          edge="1" source="appLayer" target="sqlDB" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="285" />
+              <mxPoint x="720" y="560" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

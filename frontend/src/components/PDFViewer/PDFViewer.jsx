@@ -4,6 +4,21 @@ import * as pdfjsLib from 'pdfjs-dist'
 pdfjsLib.GlobalWorkerOptions.workerSrc =
   `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`
 
+// Printed page numbers in chunks.pkl don't match digital page indices in the
+// combined PDF because the file has a shared TOC and per-law cover pages.
+// Measured offsets: digital_page = printed_page + offset
+const PAGE_OFFSETS = {
+  'Labor Law':          17,
+  'Trade Union Law':    13,
+  'Social Security Law': 9,
+  'Minimum Wage Law':    6,
+}
+
+const toDigitalPage = (cit) => {
+  if (!cit?.page_number) return 1
+  return cit.page_number + (PAGE_OFFSETS[cit.law_name_en] ?? 0)
+}
+
 export default function PDFViewer({ isOpen, citation, pdfUrl, onClose }) {
   const canvasRef  = useRef(null)
   const pdfRef     = useRef(null)
@@ -12,7 +27,6 @@ export default function PDFViewer({ isOpen, citation, pdfUrl, onClose }) {
   const [loading,  setLoading]  = useState(false)
   const [error,    setError]    = useState(null)
 
-  // Load PDF when url changes
   useEffect(() => {
     if (!pdfUrl || !isOpen) return
     setLoading(true)
@@ -22,7 +36,7 @@ export default function PDFViewer({ isOpen, citation, pdfUrl, onClose }) {
       .then(pdf => {
         pdfRef.current = pdf
         setTotal(pdf.numPages)
-        const targetPage = citation?.page_number || 1
+        const targetPage = toDigitalPage(citation)
         setPage(targetPage)
         renderPage(pdf, targetPage)
       })
@@ -33,10 +47,9 @@ export default function PDFViewer({ isOpen, citation, pdfUrl, onClose }) {
       })
   }, [pdfUrl, isOpen])
 
-  // Jump to new page when citation changes
   useEffect(() => {
     if (!pdfRef.current || !citation?.page_number) return
-    const p = citation.page_number
+    const p = toDigitalPage(citation)
     setPage(p)
     renderPage(pdfRef.current, p)
   }, [citation])
@@ -75,7 +88,7 @@ export default function PDFViewer({ isOpen, citation, pdfUrl, onClose }) {
     <div style={{
       position: 'absolute', top: 0, right: 0,
       width: 420, height: '100%',
-      background: '#fff', borderLeft: '1px solid #eeeee8',
+      background: '#fff', borderLeft: '1px solid #E4E4E4',
       display: 'flex', flexDirection: 'column',
       transform: isOpen ? 'translateX(0)' : 'translateX(100%)',
       transition: 'transform .25s ease',
@@ -84,25 +97,26 @@ export default function PDFViewer({ isOpen, citation, pdfUrl, onClose }) {
 
       {/* Header */}
       <div style={{
-        padding: '14px 16px', borderBottom: '1px solid #eeeee8',
+        padding: '14px 16px',
+        background: '#1B1B1B',
         display: 'flex', alignItems: 'flex-start', gap: 10, flexShrink: 0
       }}>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: '#1a1a1a', marginBottom: 2 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: '#F8F8F6', marginBottom: 2 }}>
             {citation ? `${lawShort[citation.law_name_en] || citation.law_name} — មាត្រា ${citation.article_number}` : ''}
           </div>
-          <div style={{ fontSize: 11, color: '#aaa' }}>cambodian_labor_laws.pdf</div>
+          <div style={{ fontSize: 11, color: '#6b7280' }}>cambodian_labor_laws.pdf</div>
         </div>
         <button
           onClick={onClose}
           style={{
             width: 28, height: 28, borderRadius: 7,
-            border: '1px solid #eee', background: 'transparent',
+            border: '1px solid rgba(255,255,255,0.12)', background: 'transparent',
             cursor: 'pointer', display: 'flex',
             alignItems: 'center', justifyContent: 'center',
-            color: '#888', flexShrink: 0, fontSize: 16
+            color: '#9ca3af', flexShrink: 0, fontSize: 16
           }}
-          onMouseEnter={e => e.currentTarget.style.background = '#f5f5f2'}
+          onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
           onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
         >✕</button>
       </div>
@@ -110,8 +124,8 @@ export default function PDFViewer({ isOpen, citation, pdfUrl, onClose }) {
       {/* Meta */}
       {citation && (
         <div style={{
-          padding: '10px 16px', background: '#f8fdf9',
-          borderBottom: '1px solid #eeeee8', flexShrink: 0,
+          padding: '10px 16px', background: 'var(--bg)',
+          borderBottom: '1px solid var(--border)', flexShrink: 0,
           display: 'flex', gap: 16
         }}>
           {[
@@ -120,8 +134,8 @@ export default function PDFViewer({ isOpen, citation, pdfUrl, onClose }) {
             ['ទំព័រ', citation.page_number],
           ].map(([label, val]) => (
             <div key={label}>
-              <div style={{ fontSize: 10, color: '#aaa', marginBottom: 2 }}>{label}</div>
-              <div style={{ fontSize: 12, fontWeight: 600, color: '#1a1a1a' }}>{val}</div>
+              <div style={{ fontSize: 10, color: '#9ca3af', marginBottom: 2 }}>{label}</div>
+              <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)' }}>{val}</div>
             </div>
           ))}
         </div>
@@ -140,8 +154,8 @@ export default function PDFViewer({ isOpen, citation, pdfUrl, onClose }) {
             height: '100%', gap: 12, color: '#888'
           }}>
             <div style={{
-              width: 32, height: 32, border: '3px solid #e0e0d8',
-              borderTop: '3px solid #1D9E75', borderRadius: '50%',
+              width: 32, height: 32, border: '3px solid #E4E4E4',
+              borderTop: '3px solid #BAEC17', borderRadius: '50%',
               animation: 'spin 1s linear infinite'
             }}></div>
             <span style={{ fontSize: 13 }}>កំពុងបើក PDF...</span>
@@ -170,21 +184,22 @@ export default function PDFViewer({ isOpen, citation, pdfUrl, onClose }) {
 
       {/* Footer nav */}
       <div style={{
-        padding: '10px 16px', borderTop: '1px solid #eeeee8',
-        display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0
+        padding: '10px 16px', borderTop: '1px solid var(--border)',
+        display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0,
+        background: 'var(--surface)',
       }}>
         <button
           onClick={() => goTo(page - 1)} disabled={page <= 1}
           style={{
             width: 30, height: 30, borderRadius: 7,
-            border: '1px solid #eee', background: 'transparent',
+            border: '1px solid var(--border)', background: 'transparent',
             cursor: page > 1 ? 'pointer' : 'not-allowed',
-            color: page > 1 ? '#555' : '#ccc', fontSize: 14,
+            color: page > 1 ? 'var(--text)' : 'var(--text-muted)', fontSize: 14,
             display: 'flex', alignItems: 'center', justifyContent: 'center'
           }}
         >‹</button>
 
-        <span style={{ fontSize: 12, color: '#888', flex: 1, textAlign: 'center' }}>
+        <span style={{ fontSize: 12, color: '#6b7280', flex: 1, textAlign: 'center' }}>
           ទំព័រ {page} / {total || '—'}
         </span>
 
@@ -192,9 +207,9 @@ export default function PDFViewer({ isOpen, citation, pdfUrl, onClose }) {
           onClick={() => goTo(page + 1)} disabled={page >= total}
           style={{
             width: 30, height: 30, borderRadius: 7,
-            border: '1px solid #eee', background: 'transparent',
+            border: '1px solid var(--border)', background: 'transparent',
             cursor: page < total ? 'pointer' : 'not-allowed',
-            color: page < total ? '#555' : '#ccc', fontSize: 14,
+            color: page < total ? 'var(--text)' : 'var(--text-muted)', fontSize: 14,
             display: 'flex', alignItems: 'center', justifyContent: 'center'
           }}
         >›</button>
@@ -202,10 +217,14 @@ export default function PDFViewer({ isOpen, citation, pdfUrl, onClose }) {
         <a
           href={pdfUrl} target="_blank" rel="noopener noreferrer"
           style={{
-            marginLeft: 8, fontSize: 12, color: '#0d7a57',
+            marginLeft: 8, fontSize: 12, color: '#111111', fontWeight: 500,
             display: 'flex', alignItems: 'center', gap: 4,
-            textDecoration: 'none'
+            textDecoration: 'none', background: '#BAEC17',
+            padding: '4px 10px', borderRadius: 6,
+            transition: 'background .15s',
           }}
+          onMouseEnter={e => e.currentTarget.style.background = '#A8D414'}
+          onMouseLeave={e => e.currentTarget.style.background = '#BAEC17'}
         >
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>

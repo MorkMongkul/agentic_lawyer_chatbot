@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Sidebar from './components/Sidebar/Sidebar'
 import ChatWindow from './components/Chat/ChatWindow'
 import PDFViewer from './components/PDFViewer/PDFViewer'
@@ -6,24 +6,27 @@ import { useChat } from './hooks/useChat'
 import { usePDFViewer } from './hooks/usePDFViewer'
 
 export default function App() {
-  const chat        = useChat()
-  const pdfViewer   = usePDFViewer()
-  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const chat      = useChat()
+  const pdfViewer = usePDFViewer()
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [isDark, setIsDark]           = useState(false)
   const [sessions, setSessions] = useState([
     { id: 'demo-1', title: 'ការបណ្តេញបុគ្គលិកដោយ...', time: 'ថ្ងៃនេះ' },
     { id: 'demo-2', title: 'ប្រាក់ឈ្នួលអប្បបរមា', time: 'ម្សិលមិញ' },
   ])
   const [activeSession, setActiveSession] = useState('demo-1')
 
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light')
+  }, [isDark])
+
   const handleNewSession = () => {
-    const id    = `session-${Date.now()}`
-    const title = 'ការសន្ទនាថ្មី'
-    setSessions(prev => [{ id, title, time: 'ឥឡូវ' }, ...prev])
+    const id = `session-${Date.now()}`
+    setSessions(prev => [{ id, title: 'ការសន្ទនាថ្មី', time: 'ឥឡូវ' }, ...prev])
     setActiveSession(id)
     chat.newSession()
   }
 
-  // Update session title from first message
   const handleSend = (text) => {
     chat.sendMessage(text)
     setSessions(prev => prev.map(s =>
@@ -34,8 +37,7 @@ export default function App() {
   }
 
   return (
-    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: '#f8f8f6' }}>
-
+    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: 'var(--bg)' }}>
       <Sidebar
         sessions={sessions}
         activeSession={activeSession}
@@ -43,6 +45,8 @@ export default function App() {
         onNewSession={handleNewSession}
         isOpen={sidebarOpen}
         onToggle={() => setSidebarOpen(o => !o)}
+        isDark={isDark}
+        onToggleTheme={() => setIsDark(d => !d)}
       />
 
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden', position: 'relative', minWidth: 0 }}>
@@ -55,6 +59,7 @@ export default function App() {
           pdfOpen={pdfViewer.isOpen}
           sidebarOpen={sidebarOpen}
           onToggleSidebar={() => setSidebarOpen(o => !o)}
+          isDark={isDark}
         />
         <PDFViewer
           isOpen={pdfViewer.isOpen}

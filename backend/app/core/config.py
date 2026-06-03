@@ -3,15 +3,16 @@ from pydantic_settings import BaseSettings
 from functools import lru_cache
 
 class Settings(BaseSettings):
-    gemini_api_key:   str
-    database_url:     str
+    database_url:            str
+    google_cloud_project:    str
+    google_cloud_location:   str = "us-central1"
 
     index_dir:        str = "data/index"
     data_dir:         str = "data/raw"
 
     embedding_model:  str = "gemini-embedding-001"
     generation_model: str = "gemini-2.5-flash"
-    grounding_model:  str = "gemini-2.5-flash"   # ← change from flash-lite
+    grounding_model:  str = "gemini-2.5-flash"
 
     embed_dimensions:  int = 768
     retrieval_top_k:   int = 5

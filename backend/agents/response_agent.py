@@ -7,12 +7,13 @@ from app.core.config import get_settings
 settings = get_settings()
 
 ANSWER_PROMPT = """\
-អ្នកជាមេធាវីជំនាញច្បាប់កម្ពុជា។ ផ្តល់ចម្លើយជាផ្លូវការ គ្រប់ជ្រុងជ្រោយ ជាភាសាខ្មែរ។
+អ្នកជាមេធាវីជំនាញច្បាប់កម្ពុជា។ ផ្តល់ចម្លើយជាផ្លូវការ ជាភាសាខ្មែរ។
 
 ក្បួនខ្នាត:
+- ឆ្លើយសំណួរដោយផ្ទាល់ និងសង្ខេប — អតិបរមា ២០០ ពាក្យ
 - ដកស្រង់មាត្រាច្បាប់ដែលពាក់ព័ន្ធដោយប្រើទម្រង់ [N] ដែល N គឺជាលេខយោងខាងក្រោម
 - ប្រើភាសាច្បាប់ជំនាញ ប៉ុន្តែអាចយល់បាន
-- បញ្ចប់ដោយផ្ដល់ដំបូន្មានជាក់លាក់
+- ផ្តល់ចំណុចសំខាន់ ២-៣ ប៉ុណ្ណោះ; កុំរាយបញ្ជីវែង
 - មិនបង្កើតព័ត៌មានដែលគ្មាននៅក្នុងឯកសារ
 
 ឆ្លើយតបជាអត្ថបទធម្មតា មិនមែន JSON។
@@ -71,16 +72,19 @@ def _extract_citations(answer: str, chunks: list[dict]) -> list[dict]:
 
     try:
         response = client.models.generate_content(
-            model=settings.grounding_model,   # fast model for citation extraction
+            model=settings.grounding_model,
             contents=prompt,
             config=types.GenerateContentConfig(
                 system_instruction=CITATION_PROMPT,
                 response_mime_type="application/json",
                 temperature=0.0,
                 max_output_tokens=500,
+                thinking_config=types.ThinkingConfig(thinking_budget=0),
             ),
         )
-        text = response.text.strip()
+        text = (response.text or "").strip()
+        if not text:
+            raise ValueError("Empty citation response")
         # Strip fences if present
         text = re.sub(r'^```json\s*', '', text, flags=re.MULTILINE)
         text = re.sub(r'^```\s*',     '', text, flags=re.MULTILINE)
@@ -152,15 +156,22 @@ def generate_node(state: dict) -> dict:
         config=types.GenerateContentConfig(
             system_instruction=ANSWER_PROMPT,
             temperature=0.1,
-            max_output_tokens=8192,   # ← much higher, no JSON overhead
+            max_output_tokens=8192,
         ),
     )
 
-    answer = response.text.strip()
+    answer = (response.text or "").strip()
     print(f"[GENERATE] Answer: {len(answer)} chars")
 
     # Step 2 — Extract citations separately (fast, no token pressure)
     citations = _extract_citations(answer, chunks)
+
+    # Step 3 — Keep only citations whose [N] number actually appears in the answer.
+    # The model is instructed to write [1], [2] etc. inline; any citation not
+    # referenced inline was retrieved but not used — drop it.
+    cited_nums = {int(n) for n in re.findall(r'\[(\d+)\]', answer)}
+    citations  = [c for c in citations if c.get("ref_num") in cited_nums]
+    print(f"[CITATIONS] Kept {len(citations)} inline-referenced citations")
 
     return {
         **state,

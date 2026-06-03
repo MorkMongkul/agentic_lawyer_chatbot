@@ -1,0 +1,452 @@
+{
+  "metadata": {
+    "description": "Evaluation dataset for Cambodian Labour Law RAG Chatbot",
+    "total_questions": 30,
+    "laws_covered": [
+      "ច្បាប់ស្តីពីការងារ (Labor Law)",
+      "ច្បាប់ស្តីពីសហជីព (Trade Union Law)",
+      "ច្បាប់ស្តីពីរបបសន្តិសុខសង្គម (Social Security Law)",
+      "ច្បាប់ស្តីពីប្រាក់ឈ្នួលអប្បបរមា (Minimum Wage Law)"
+    ],
+    "categories": [
+      "employment_contract",
+      "working_hours",
+      "leave_holidays",
+      "wages_compensation",
+      "termination",
+      "trade_union",
+      "social_security",
+      "workplace_regulations",
+      "discrimination",
+      "dispute_resolution"
+    ],
+    "scoring_guide": {
+      "faithfulness": "1-5: Does the answer only use facts from retrieved articles? (5=no hallucination)",
+      "relevance": "1-5: Does the answer actually address the question?",
+      "citation_accuracy": "yes/no: Does the cited article actually contain the stated information?",
+      "completeness": "1-5: Are all key points from the law covered?"
+    }
+  },
+  "questions": [
+    {
+      "id": 1,
+      "category": "employment_contract",
+      "question_km": "តើកិច្ចសន្យាការងារមានអ្វីដែរ?",
+      "question_en": "What is an employment contract?",
+      "expected_articles": ["65"],
+      "expected_law": "ច្បាប់ស្តីពីការងារ",
+      "key_facts": [
+        "កិច្ចសន្យាការងារ គឺជាកិច្ចសន្យាដែលបង្កើតឱ្យមានការទាក់ទងផ្នែកការងាររវាងកម្មករនិយោជិតនិងនិយោជក",
+        "អាចធ្វើជាលាយលក្ខណ៍អក្សរ ឬដោយមាត់ទទេ",
+        "ស្ថិតនៅក្រោមវិធានអាជ្ញាគតិ"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": 2,
+      "category": "employment_contract",
+      "question_km": "តើកិច្ចសន្យាការងារមានថិរវេលាកំណត់អាចមានរយៈពេលអតិបរមាប៉ុន្មាន?",
+      "question_en": "What is the maximum duration of a fixed-term employment contract?",
+      "expected_articles": ["67"],
+      "expected_law": "ច្បាប់ស្តីពីការងារ",
+      "key_facts": [
+        "មិនអាចមានរយៈពេលលើសពីពីរឆ្នាំ",
+        "អាចបន្តសាជាថ្មីម្តងឬច្រើនដង ប្រសិនបើរយៈពេលមិនលើស ២ ឆ្នាំ",
+        "ត្រូវធ្វើជាលាយលក្ខណ៍អក្សរ បើមិនដូច្នោះក្លាយជាកិច្ចសន្យាគ្មានថិរវេលា"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": 3,
+      "category": "employment_contract",
+      "question_km": "តើរយៈពេលសាកល្បងការងារអតិបរមាមានប៉ុន្មាន?",
+      "question_en": "What is the maximum probation period for employment?",
+      "expected_articles": ["68"],
+      "expected_law": "ច្បាប់ស្តីពីការងារ",
+      "key_facts": [
+        "បីខែ ចំពោះនិយោជិត",
+        "ពីរខែ ចំពោះកម្មករឯកទេស",
+        "មួយខែ ចំពោះកម្មករធម្មតា"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": 4,
+      "category": "termination",
+      "question_km": "តើរបៀបឱ្យដំណឹងមុនពេលបញ្ឈប់ការងារមានថិរវេលាប៉ុន្មាន?",
+      "question_en": "What are the required notice periods for terminating an indefinite-term employment contract?",
+      "expected_articles": ["75"],
+      "expected_law": "ច្បាប់ស្តីពីការងារ",
+      "key_facts": [
+        "ប្រាំពីរថ្ងៃ បើធ្វើការតិចជាងប្រាំមួយខែ",
+        "ដប់ប្រាំថ្ងៃ បើធ្វើការពីប្រាំមួយខែដល់ពីរឆ្នាំ",
+        "មួយខែ បើធ្វើការលើសពីពីរឆ្នាំដល់ប្រាំឆ្នាំ",
+        "ពីរខែ បើធ្វើការលើសពីប្រាំឆ្នាំដល់ដប់ឆ្នាំ",
+        "បីខែ បើធ្វើការលើសពីដប់ឆ្នាំ"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": 5,
+      "category": "termination",
+      "question_km": "តើការបញ្ឈប់ការងារដោយគ្មានការជូនដំណឹងមុននឹងប៉ះពាល់ដល់និយោជកដោយរបៀបណា?",
+      "question_en": "What happens if an employer terminates a contract without giving the required notice?",
+      "expected_articles": ["77"],
+      "expected_law": "ច្បាប់ស្តីពីការងារ",
+      "key_facts": [
+        "និយោជកត្រូវចេញប្រាក់ទូទាត់ស្មើនឹងប្រាក់ឈ្នួលក្នុងរយៈពេលឱ្យដំណឹងមុន",
+        "រួមទាំងអត្ថប្រយោជន៍គ្រប់ប្រភេទ"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": 6,
+      "category": "working_hours",
+      "question_km": "តើម៉ោងធ្វើការធម្មតាប្រចាំថ្ងៃ និងប្រចាំសប្តាហ៍មានប៉ុន្មាន?",
+      "question_en": "What are the normal working hours per day and per week?",
+      "expected_articles": ["137"],
+      "expected_law": "ច្បាប់ស្តីពីការងារ",
+      "key_facts": [
+        "ប្រាំបីម៉ោងក្នុងមួយថ្ងៃ",
+        "សែសិបប្រាំបីម៉ោងក្នុងមួយអាទិត្យ",
+        "អនុវត្តចំពោះកម្មករនិយោជិតទាំងពីរភេទ"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": 7,
+      "category": "working_hours",
+      "question_km": "តើម៉ោងបន្ថែមគួរទទួលបានប្រាក់ឈ្នួលប៉ុន្មានភាគរយ?",
+      "question_en": "What is the overtime pay rate?",
+      "expected_articles": ["139"],
+      "expected_law": "ច្បាប់ស្តីពីការងារ",
+      "key_facts": [
+        "ម៉ោងបន្ថែមធម្មតា ៥០% (ហាសិបភាគរយ)",
+        "ម៉ោងបន្ថែមពេលយប់ (ម៉ោង ២២ ដល់ ០៥) ១០០%",
+        "ម៉ោងបន្ថែមនៅថ្ងៃឈប់សម្រាកប្រចាំសប្តាហ៍ ១០០%"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": 8,
+      "category": "working_hours",
+      "question_km": "តើការងារពេលយប់ ត្រូវបើកប្រាក់ឈ្នួលក្នុងអត្រាប៉ុន្មាន?",
+      "question_en": "What is the pay rate for night work?",
+      "expected_articles": ["144"],
+      "expected_law": "ច្បាប់ស្តីពីការងារ",
+      "key_facts": [
+        "ការងារពេលយប់ ត្រូវឱ្យប្រាក់ឈ្នួលតាមអត្រា ១៣០%",
+        "ពេលយប់ = ម៉ោង ២២ ទៅ ម៉ោង ០៥ ភ្លឺ"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": 9,
+      "category": "leave_holidays",
+      "question_km": "តើការឈប់សម្រាកប្រចាំសប្តាហ៍ត្រូវមានរយៈពេលអប្បបរមាប៉ុន្មាន?",
+      "question_en": "What is the minimum weekly rest period?",
+      "expected_articles": ["147", "146"],
+      "expected_law": "ច្បាប់ស្តីពីការងារ",
+      "key_facts": [
+        "ម្ភៃបួនម៉ោងបន្តបន្ទាប់គ្នា",
+        "ជាគោលការណ៍ ត្រូវឱ្យឈប់នៅថ្ងៃអាទិត្យ",
+        "ហាមឃាត់ប្រើកម្មករលើសពីប្រាំមួយថ្ងៃ/សប្តាហ៍"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": 10,
+      "category": "leave_holidays",
+      "question_km": "តើការឈប់សម្រាកប្រចាំឆ្នាំដោយមានប្រាក់ឈ្នួលមានប៉ុន្មានថ្ងៃ?",
+      "question_en": "How many days of paid annual leave is an employee entitled to?",
+      "expected_articles": ["166"],
+      "expected_law": "ច្បាប់ស្តីពីការងារ",
+      "key_facts": [
+        "មួយថ្ងៃកន្លះ (1.5 ថ្ងៃ) ក្នុងមួយខែ",
+        "ស្មើ ១៨ ថ្ងៃ/ឆ្នាំ",
+        "បន្ថែមមួយថ្ងៃ ក្នុងគ្រប់ ៣ ឆ្នាំនៃអតីតភាព",
+        "ត្រូវធ្វើការ ១ ឆ្នាំ ទើបមានសិទ្ធិ"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": 11,
+      "category": "leave_holidays",
+      "question_km": "តើថ្ងៃបុណ្យជាតិ ត្រូវរាប់ជាថ្ងៃឈប់សម្រាកប្រចាំឆ្នាំដែរទេ?",
+      "question_en": "Are public holidays counted as annual leave days?",
+      "expected_articles": ["166", "161"],
+      "expected_law": "ច្បាប់ស្តីពីការងារ",
+      "key_facts": [
+        "ថ្ងៃបុណ្យតាមច្បាប់ដែលត្រូវឈប់ហើយមានប្រាក់ឈ្នួល មិនត្រូវរាប់ជាថ្ងៃឈប់សម្រាកប្រចាំឆ្នាំ",
+        "ការអាក់ខានធ្វើការដោយហេតុជំងឺ ក៏មិនរាប់ជាការឈប់សម្រាកប្រចាំឆ្នាំដែរ"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": 12,
+      "category": "leave_holidays",
+      "question_km": "តើប្រាក់ឈ្នួលត្រូវបង់ជូនកម្មករនិយោជិតពេលណា មុនការឈប់សម្រាក?",
+      "question_en": "When must the employer pay wages before annual leave?",
+      "expected_articles": ["168"],
+      "expected_law": "ច្បាប់ស្តីពីការងារ",
+      "key_facts": [
+        "ត្រូវបង់ មុនថ្ងៃឈប់សម្រាក",
+        "ស្មើនឹងចំនួនមធ្យមនៃប្រាក់ឈ្នួល បុព្វលាភ វិភាជន៍ អត្ថប្រយោជន៍ ក្នុងរយៈ ១២ ខែ"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": 13,
+      "category": "workplace_regulations",
+      "question_km": "តើសហគ្រាសណាខ្លះដែលត្រូវតែមានបទបញ្ជាផ្ទៃក្នុង?",
+      "question_en": "Which companies are required to have internal work regulations?",
+      "expected_articles": ["22"],
+      "expected_law": "ច្បាប់ស្តីពីការងារ",
+      "key_facts": [
+        "សហគ្រាសដែលមានកម្មករនិយោជិតយ៉ាងតិចប្រាំបីនាក់",
+        "ត្រូវតែបិទ/ផ្សព្វផ្សាយនៅកន្លែងសមរម្យ"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": 14,
+      "category": "workplace_regulations",
+      "question_km": "តើនិយោជកអាចដាក់ទោសវិន័យដល់កម្មករក្នុងរយៈពេលដប់ប្រាំថ្ងៃ ឬច្រើនជាងនេះ?",
+      "question_en": "What is the time limit for an employer to impose disciplinary action after learning of a fault?",
+      "expected_articles": ["26"],
+      "expected_law": "ច្បាប់ស្តីពីការងារ",
+      "key_facts": [
+        "និយោជកអាចដាក់ទោសបានត្រឹម ១៥ ថ្ងៃ ក្រោយដឹងពីកំហុស",
+        "ចំពោះកំហុសធ្ងន់ ត្រូវចាត់វិធានការក្នុង ៧ ថ្ងៃ"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": 15,
+      "category": "discrimination",
+      "question_km": "តើច្បាប់ការងារហាមឃាត់ការរើសអើងដោយហេតុអ្វីខ្លះ?",
+      "question_en": "What types of discrimination are prohibited in Cambodian labor law?",
+      "expected_articles": ["12"],
+      "expected_law": "ច្បាប់ស្តីពីការងារ",
+      "key_facts": [
+        "ពូជសាសន៍",
+        "ពណ៌សម្បរ",
+        "ភេទ",
+        "សាសនា",
+        "គំនិតនយោបាយ",
+        "ជាតិកំណើត",
+        "ដើមកំណើតសង្គម",
+        "ការចូលជាសមាជិកសហជីព"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": 16,
+      "category": "wages_compensation",
+      "question_km": "តើប្រាក់បំណាច់បញ្ចប់កិច្ចសន្យាការងារ (FDC) ត្រូវគណនាដោយរបៀបណា?",
+      "question_en": "How is the end-of-contract compensation calculated for a fixed-term contract?",
+      "expected_articles": ["73"],
+      "expected_law": "ច្បាប់ស្តីពីការងារ",
+      "key_facts": [
+        "ត្រូវប្រគល់ប្រាក់បំណាច់ ៥% នៃប្រាក់ឈ្នួលក្នុងរយៈពេលកិច្ចសន្យា",
+        "ស្របតាមអនុសញ្ញារួម"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": 17,
+      "category": "employment_contract",
+      "question_km": "តើគំរូបទបញ្ជាផ្ទៃក្នុងត្រូវដែលកើតឡើងនៅក្នុងរយៈពេលប៉ុន្មានបន្ទាប់ពីបើកសហគ្រាស?",
+      "question_en": "Within what period must internal regulations be established after opening a company?",
+      "expected_articles": ["24"],
+      "expected_law": "ច្បាប់ស្តីពីការងារ",
+      "key_facts": [
+        "ក្នុងរយៈពេលបីខែ បន្ទាប់ពីថ្ងៃបើកសហគ្រាស",
+        "ត្រូវពិគ្រោះជាមួយតំណាងកម្មករ",
+        "ត្រូវទទួលទិដ្ឋាការពីអធិការការងារ"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": 18,
+      "category": "dispute_resolution",
+      "question_km": "តើស្ថាប័នណាទទួលបន្ទុកជំនុំជម្រះវិវាទការងារ?",
+      "question_en": "What institution is responsible for adjudicating labor disputes?",
+      "expected_articles": ["387", "389", "385", "300"],
+      "expected_law": "ច្បាប់ស្តីពីការងារ",
+      "key_facts": [
+        "តុលាការការងារ ជំនុំជម្រះវិវាទបុគ្គល",
+        "នៅពេលមិនទាន់បង្កើតតុលាការការងារ ត្រូវដាក់ជូនតុលាការអាជ្ញាគតិ"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": 19,
+      "category": "trade_union",
+      "question_km": "តើម្នាក់ចំនួនអប្បបរមាប៉ុន្មាននាក់ ដើម្បីបង្កើតសហជីពមូលដ្ឋាន?",
+      "question_en": "What is the minimum number of members required to form a basic trade union?",
+      "expected_articles": ["10"],
+      "expected_law": "ច្បាប់ស្តីពីសហជីព",
+      "key_facts": [
+        "យ៉ាងតិច ១០ នាក់ ដើម្បីបង្កើតសហជីពមូលដ្ឋាន",
+        "យ៉ាងតិច ៧ សហជីព ដើម្បីបង្កើតសហព័ន្ធ",
+        "យ៉ាងតិច ៥ សហព័ន្ធ ដើម្បីបង្កើតសហភាព"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": 20,
+      "category": "trade_union",
+      "question_km": "តើកម្មករនិយោជិតមានសិទ្ធិអ្វីខ្លះទាក់ទងនឹងការចូលរួមសហជីព?",
+      "question_en": "What rights do workers have regarding union membership?",
+      "expected_articles": ["5", "7"],
+      "expected_law": "ច្បាប់ស្តីពីសហជីព",
+      "key_facts": [
+        "មានសិទ្ធិចូលរួមបង្កើតសហជីព",
+        "មានសិទ្ធិជ្រើសរើសសហជីពតាមការចង់បាន",
+        "មានសិទ្ធិដកខ្លួនចេញពីសហជីពគ្រប់ពេល",
+        "គ្មាននរណាអាចបង្ខំឱ្យចូលឬមិនចូលសហជីពបាន"
+      ],
+      "difficulty": "easy"
+    },
+    {
+      "id": 21,
+      "category": "trade_union",
+      "question_km": "តើការចុះបញ្ជីសហជីពត្រូវរង់ចាំរយៈពេលប៉ុន្មានថ្ងៃ?",
+      "question_en": "Within how many days must the Ministry of Labor respond to a union registration application?",
+      "expected_articles": ["12"],
+      "expected_law": "ច្បាប់ស្តីពីសហជីព",
+      "key_facts": [
+        "ក្រសួងការងារត្រូវឆ្លើយតបក្នុង ៣០ ថ្ងៃ",
+        "បើមិនឆ្លើយ ចាត់ទុកថាបានចុះបញ្ជីរួចហើយ"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": 22,
+      "category": "trade_union",
+      "question_km": "តើហាមឃាត់ការរើសអើងដោយហេតុអ្វីក្នុងការចូលរួមជាសមាជិកសហជីព?",
+      "question_en": "What types of discrimination are prohibited in union membership?",
+      "expected_articles": ["6"],
+      "expected_law": "ច្បាប់ស្តីពីសហជីព",
+      "key_facts": [
+        "ពូជសាសន៍ ពណ៌សម្បុរ ភេទ ជំនឿសាសនា ទស្សនៈនយោបាយ",
+        "សញ្ជាតិ ដើមកំណើតសង្គម ឬស្ថានភាពសុខភាព",
+        "មានសិទ្ធិចូលជាសមាជិកដោយសេរី"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": 23,
+      "category": "social_security",
+      "question_km": "តើការចុះឈ្មោះអ្នកធានារ៉ាប់រងមានចុះក្នុងច្បាប់ដូចម្ដេច?",
+      "question_en": "What is the social security registration requirement for workers?",
+      "expected_articles": ["8"],
+      "expected_law": "ច្បាប់ស្តីពីរបបសន្តិសុខសង្គម",
+      "key_facts": [
+        "និយោជកដែលមានកម្មករបំរើ ត្រូវចុះឈ្មោះទៅ NSSF",
+        "ត្រូវបំពេញការចុះឈ្មោះ ១ ខែ ក្រោយការជួលកម្មករ"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": 24,
+      "category": "social_security",
+      "question_km": "តើការធានារ៉ាប់រងគ្រោះថ្នាក់ការងារ ផ្ដល់ប្រយោជន៍អ្វីខ្លះ?",
+      "question_en": "What benefits does work injury insurance provide?",
+      "expected_articles": ["37", "38"],
+      "expected_law": "ច្បាប់ស្តីពីរបបសន្តិសុខសង្គម",
+      "key_facts": [
+        "ការព្យាបាលពេទ្យ",
+        "ប្រាក់ជំងឺចិត្ត/ប្រាក់ចំណូលជំនួស",
+        "ការដំណឹង/ប្រាក់ស្ដាប់ ក្នុងករណីស្លាប់"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": 25,
+      "category": "social_security",
+      "question_km": "តើរបបសន្តិសុខសង្គមមានបម្រើការប្រភេទណាខ្លះ?",
+      "question_en": "What types of social security schemes are covered?",
+      "expected_articles": ["5"],
+      "expected_law": "ច្បាប់ស្តីពីរបបសន្តិសុខសង្គម",
+      "key_facts": [
+        "ការធានារ៉ាប់រងគ្រោះថ្នាក់ការងារ និងជំងឺវិជ្ជាជីវៈ",
+        "ការធានារ៉ាប់រងសុខភាព",
+        "ប្រព័ន្ធប្រាក់សន្សំចូលនិវត្តន៍"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": 26,
+      "category": "wages_compensation",
+      "question_km": "តើនរណាជាអ្នកកំណត់ប្រាក់ឈ្នួលអប្បបរមា?",
+      "question_en": "Who determines the minimum wage?",
+      "expected_articles": ["8", "9"],
+      "expected_law": "ច្បាប់ស្តីពីប្រាក់ឈ្នួលអប្បបរមា",
+      "key_facts": [
+        "គណៈកម្មការប្រាក់ឈ្នួលអប្បបរមា",
+        "ក្រោយការស្នើសុំ រដ្ឋមន្ត្រីក្រសួងការងារចេញប្រកាស"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": 27,
+      "category": "wages_compensation",
+      "question_km": "តើការរំលោភបំពានលើច្បាប់ប្រាក់ឈ្នួលអប្បបរមា នឹងត្រូវទទួលទោសដូចម្ដេច?",
+      "question_en": "What are the penalties for violating minimum wage law?",
+      "expected_articles": ["22"],
+      "expected_law": "ច្បាប់ស្តីពីប្រាក់ឈ្នួលអប្បបរមា",
+      "key_facts": [
+        "ពិន័យជាប្រាក់",
+        "ការជូនដំណឹង ឬដំណោះស្រាយ"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": 28,
+      "category": "employment_contract",
+      "question_km": "តើការងារដោយបង្ខំ ត្រូវបានចែងដូចម្ដេចក្នុងច្បាប់ការងារ?",
+      "question_en": "How does the Labor Law address forced labor?",
+      "expected_articles": ["15", "16"],
+      "expected_law": "ច្បាប់ស្តីពីការងារ",
+      "key_facts": [
+        "ការងារដោយបង្ខំ ត្រូវហាមឃាត់ជាដាច់ខាត",
+        "អនុលោមតាមអនុសញ្ញា ILO លេខ ២៩ ឆ្នាំ ១៩៣០",
+        "ការជួលមនុស្ស ឱ្យធ្វើការដើម្បីកាត់ជំពាក់ ត្រូវហាមឃាត់"
+      ],
+      "difficulty": "medium"
+    },
+    {
+      "id": 29,
+      "category": "employment_contract",
+      "question_km": "តើការព្យួរកិច្ចសន្យាការងារ មានហេតុអ្វីខ្លះ?",
+      "question_en": "What are the grounds for suspension of an employment contract?",
+      "expected_articles": ["71"],
+      "expected_law": "ច្បាប់ស្តីពីការងារ",
+      "key_facts": [
+        "ការបំពេញកាតព្វកិច្ចការពារជាតិ",
+        "ជំងឺ (ត្រឹម ៦ ខែ)",
+        "គ្រោះថ្នាក់ការងារ",
+        "ការឈប់សម្រាកមាតុភាព",
+        "ភ្នំសក្តិ (force majeure) ត្រឹម ៣ ខែ",
+        "ការលំបាកផ្នែកសេដ្ឋកិច្ច ត្រឹម ២ ខែ"
+      ],
+      "difficulty": "hard"
+    },
+    {
+      "id": 30,
+      "category": "workplace_regulations",
+      "question_km": "តើការបញ្ឈប់ការងារ ហើយចេញពីសហជីព ប្រព្រឹត្តតាមដំណើរការដូចម្ដេច?",
+      "question_en": "What is the process for a worker to withdraw from a trade union?",
+      "expected_articles": ["7"],
+      "expected_law": "ច្បាប់ស្តីពីសហជីព",
+      "key_facts": [
+        "ដាក់លិខិតចុះហត្ថលេខា ឬផ្ដិតម្រាមដៃ ទៅសហជីព និងនិយោជក",
+        "ត្រូវបានចាត់ទុកជាលែងជាសមាជិកភ្លាម",
+        "និយោជកត្រូវបញ្ឈប់ការកាត់ភាគទានសហជីពភ្លាម"
+      ],
+      "difficulty": "medium"
+    }
+  ]
+}

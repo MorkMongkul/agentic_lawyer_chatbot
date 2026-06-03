@@ -14,12 +14,13 @@ Intents:
 - legal_qa        : general legal question requiring article retrieval
 - article_lookup  : user asks for a specific article number (e.g. "មាត្រា ៧៤")
 - definition      : user asks what a legal term means
-- recent_news     : user asks about recent events, amendments, current rates
+- recent_news     : user asks about recent events, news, or the CURRENT monetary value of minimum wage (ប្រាក់ឈ្នួលអប្បបរមាឥឡូវ)
 - greeting        : hello, thank you, chitchat, off-topic
 
 Rules:
 - If the query mentions a specific article number (មាត្រា + number), use article_lookup
 - Extract the article number as an Arabic numeral if present
+- Questions about legal pay RATES, overtime, night work, or working hours are always legal_qa NOT recent_news
 - Return ONLY valid JSON, no explanation
 
 Output format:
@@ -38,15 +39,20 @@ def classify_intent_node(state: dict) -> dict:
                     response_mime_type="application/json",
                     temperature=0.0,
                     max_output_tokens=50,
+                    thinking_config=types.ThinkingConfig(thinking_budget=0),
                 ),
             )
-            result         = json.loads(response.text.strip())
+            text = response.text
+            if not text:
+                raise ValueError("Empty response from model")
+            result         = json.loads(text.strip())
             intent         = result.get("intent", "legal_qa")
             article_number = result.get("article_number")
             break
 
         except genai_errors.ClientError as e:
-            if e.status_code == 429 and attempt < 2:
+            code = getattr(e, 'code', None) or getattr(e, 'status_code', None)
+            if code == 429 and attempt < 2:
                 wait = (attempt + 1) * 10
                 print(f"[INTENT] Rate limited, waiting {wait}s...")
                 time.sleep(wait)

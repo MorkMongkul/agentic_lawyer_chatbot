@@ -23,27 +23,29 @@ def grounding_node(state: dict) -> dict:
     if not chunks:
         return {**state, "is_grounded": False}
 
-    # Build context preview (first 200 chars of each chunk)
+    # Build context preview (first 500 chars of each chunk)
     context = "\n\n".join([
-        f"[{i+1}] {c['law_name_en']} Art.{c['article_number']}: {c['text'][:200]}"
+        f"[{i+1}] {c['law_name_en']} Art.{c['article_number']}: {c['text'][:500]}"
         for i, c in enumerate(chunks)
     ])
 
     prompt = f"Question: {state['user_query']}\n\nRetrieved articles:\n{context}"
 
     response = client.models.generate_content(
-        model=settings.grounding_model,   # fast model
+        model=settings.grounding_model,
         contents=prompt,
         config=types.GenerateContentConfig(
             system_instruction=SYSTEM_PROMPT,
             response_mime_type="application/json",
             temperature=0.0,
             max_output_tokens=20,
+            thinking_config=types.ThinkingConfig(thinking_budget=0),
         ),
     )
 
     try:
-        result      = json.loads(response.text.strip())
+        text        = response.text or ""
+        result      = json.loads(text.strip())
         is_grounded = result.get("is_relevant", False)
     except Exception:
         is_grounded = bool(chunks)  # fallback: trust if chunks exist

@@ -14,22 +14,16 @@ export default function CitationChip({ citation, onClick }) {
       style={{
         display: 'inline-flex', alignItems: 'center', gap: 5,
         padding: '4px 10px',
-        background: '#f0fdf8', border: '1px solid #9fe1cb',
-        borderRadius: 20, fontSize: 12, color: '#0d7a57',
-        cursor: 'pointer', fontFamily: 'inherit',
-        transition: 'all .15s', whiteSpace: 'nowrap'
+        background: '#BAEC17', border: 'none',
+        borderRadius: 20, fontSize: 12, color: '#111111',
+        cursor: 'pointer', fontFamily: 'inherit', fontWeight: 500,
+        transition: 'background .15s', whiteSpace: 'nowrap'
       }}
-      onMouseEnter={e => {
-        e.currentTarget.style.background = '#dcfbee'
-        e.currentTarget.style.borderColor = '#1D9E75'
-      }}
-      onMouseLeave={e => {
-        e.currentTarget.style.background = '#f0fdf8'
-        e.currentTarget.style.borderColor = '#9fe1cb'
-      }}
+      onMouseEnter={e => e.currentTarget.style.background = '#A8D414'}
+      onMouseLeave={e => e.currentTarget.style.background = '#BAEC17'}
     >
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
-        stroke="#1D9E75" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        stroke="#111111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
         <polyline points="14 2 14 8 20 8"></polyline>
       </svg>

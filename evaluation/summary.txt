@@ -1,0 +1,24 @@
+============================================================
+EVALUATION SUMMARY
+============================================================
+Total questions  : 30
+Retrieval hits   : 23/30 (76.7%)
+Citation accuracy: 21/30  (70.0%)
+Grounding rate   : 23/30  (76.7%)
+Avg retries/query: 1.23
+
+Per-category breakdown:
+  employment_contract          retrieval=6/6  citation=6/6
+  termination                  retrieval=2/2  citation=2/2
+  working_hours                retrieval=3/3  citation=3/3
+  leave_holidays               retrieval=3/4  citation=3/4
+  workplace_regulations        retrieval=1/3  citation=1/3
+  discrimination               retrieval=1/1  citation=1/1
+  wages_compensation           retrieval=3/3  citation=1/3
+  dispute_resolution           retrieval=1/1  citation=1/1
+  trade_union                  retrieval=3/4  citation=3/4
+  social_security              retrieval=0/3  citation=0/3
+
+NOTE: Manual scoring (faithfulness/relevance/completeness)
+      should be filled in results.json after reviewing answers.
+============================================================

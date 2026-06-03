@@ -1,0 +1,335 @@
+<mxfile>
+  <diagram name="System Architecture">
+    <mxGraphModel dx="1400" dy="900" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ════════════════════════════════════════════════════
+             LAYER TITLES
+        ════════════════════════════════════════════════════ -->
+        <mxCell id="t_user" value="User Interaction Layer"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=16;fontStyle=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="60" y="120" width="280" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t_agentic" value="Agentic Architecture"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=16;fontStyle=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="1030" y="115" width="280" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t_kb" value="Knowledge Base"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=16;fontStyle=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="1330" y="430" width="220" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="t_llm" value="LLM Layer (Google Vertex AI)"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=16;fontStyle=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="1010" y="560" width="360" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ════════════════════════════════════════════════════
+             USER INTERACTION LAYER (dashed container)
+        ════════════════════════════════════════════════════ -->
+        <mxCell id="userBox"
+          style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 4;strokeColor=#000000;fillColor=none;strokeWidth=1.5;"
+          vertex="1" parent="1">
+          <mxGeometry x="60" y="160" width="320" height="200" as="geometry" />
+        </mxCell>
+
+        <mxCell id="usersIcon"
+          value="&lt;b&gt;Users&lt;/b&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;verticalAlign=bottom;"
+          vertex="1" parent="1">
+          <mxGeometry x="90" y="200" width="110" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="chatUI"
+          value="&lt;b&gt;Chat UI&lt;/b&gt;&lt;br&gt;React 19 + Vite"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;verticalAlign=bottom;"
+          vertex="1" parent="1">
+          <mxGeometry x="240" y="200" width="110" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e_users_chat"
+          style="edgeStyle=none;rounded=0;strokeColor=#4d94ff;strokeWidth=2;endArrow=classic;"
+          edge="1" source="usersIcon" target="chatUI" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ════════════════════════════════════════════════════
+             PDF VIEWER (bottom-left)  — replaces Ticket Agent
+        ════════════════════════════════════════════════════ -->
+        <mxCell id="pdfBox"
+          style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 4;strokeColor=#000000;fillColor=none;strokeWidth=1.5;"
+          vertex="1" parent="1">
+          <mxGeometry x="90" y="640" width="250" height="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pdfIcon"
+          value="&lt;b&gt;PDF Viewer&lt;/b&gt;&lt;br&gt;pdfjs-dist&lt;br&gt;(opens cited article)"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;"
+          vertex="1" parent="1">
+          <mxGeometry x="130" y="670" width="170" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Document server (right of PDF viewer) -->
+        <mxCell id="docServer"
+          value="&lt;b&gt;Document API&lt;/b&gt;&lt;br&gt;GET /api/documents&lt;br&gt;(law PDF, whitelisted)"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;"
+          vertex="1" parent="1">
+          <mxGeometry x="430" y="665" width="180" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- PDF Viewer → Document API -->
+        <mxCell id="e_pdf_doc"
+          value="GET PDF page"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#000000;strokeWidth=1.5;endArrow=classic;fontSize=11;"
+          edge="1" source="pdfIcon" target="docServer" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Chat UI → PDF Viewer (citation click) -->
+        <mxCell id="e_chat_pdf"
+          value="citation click"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#000000;strokeWidth=1.5;endArrow=classic;fontSize=11;exitX=0.5;exitY=1;entryX=0.5;entryY=0;"
+          edge="1" source="chatUI" target="pdfIcon" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="215" y="500" />
+              <mxPoint x="215" y="640" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ════════════════════════════════════════════════════
+             AGENTIC ARCHITECTURE (big dashed container)
+        ════════════════════════════════════════════════════ -->
+        <mxCell id="agenticBox"
+          style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 4;strokeColor=#000000;fillColor=none;strokeWidth=1.5;"
+          vertex="1" parent="1">
+          <mxGeometry x="560" y="150" width="420" height="330" as="geometry" />
+        </mxCell>
+
+        <!-- Intent Classifier (Supervisor-equivalent) -->
+        <mxCell id="intentNode"
+          style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=4 2;strokeColor=#333333;fillColor=none;strokeWidth=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="585" y="180" width="370" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="intentLabel"
+          value="&lt;b&gt;Intent Classifier + Query Rewriter&lt;/b&gt;&lt;br&gt;Classifies query intent&lt;br&gt;Expands informal Khmer → formal legal terms"
+          style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=11;"
+          vertex="1" parent="1">
+          <mxGeometry x="610" y="195" width="320" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="intentTag"
+          value="Supervisor Node"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontStyle=2;"
+          vertex="1" parent="1">
+          <mxGeometry x="595" y="245" width="160" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Answer Generator + Grounding (Feedback-equivalent) -->
+        <mxCell id="genNode"
+          style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=4 2;strokeColor=#333333;fillColor=none;strokeWidth=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="585" y="320" width="370" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="genLabel"
+          value="&lt;b&gt;Grounding Check + Answer Generator&lt;/b&gt;&lt;br&gt;Verifies retrieved articles are relevant&lt;br&gt;Generates Khmer answer + extracts citations"
+          style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=11;"
+          vertex="1" parent="1">
+          <mxGeometry x="600" y="335" width="340" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="genTag"
+          value="Generation Node"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontStyle=2;"
+          vertex="1" parent="1">
+          <mxGeometry x="595" y="392" width="160" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ════════════════════════════════════════════════════
+             RETRIEVAL AGENT (between Agentic and KB)
+        ════════════════════════════════════════════════════ -->
+        <mxCell id="retrievalNode"
+          value="&lt;b&gt;Retrieval Agent&lt;/b&gt;&lt;br&gt;Hybrid Search&lt;br&gt;FAISS + BM25 → RRF"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;"
+          vertex="1" parent="1">
+          <mxGeometry x="1050" y="185" width="160" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ════════════════════════════════════════════════════
+             KNOWLEDGE BASE (dashed container, right)
+        ════════════════════════════════════════════════════ -->
+        <mxCell id="kbBox"
+          style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 4;strokeColor=#000000;fillColor=none;strokeWidth=1.5;"
+          vertex="1" parent="1">
+          <mxGeometry x="1300" y="170" width="250" height="270" as="geometry" />
+        </mxCell>
+
+        <mxCell id="faissNode"
+          value="&lt;b&gt;FAISS Vector Index&lt;/b&gt;&lt;br&gt;622 vectors, dim=768&lt;br&gt;cosine similarity"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;verticalAlign=middle;"
+          vertex="1" parent="1">
+          <mxGeometry x="1325" y="195" width="200" height="65" as="geometry" />
+        </mxCell>
+
+        <mxCell id="bm25Node"
+          value="&lt;b&gt;BM25 Keyword Index&lt;/b&gt;&lt;br&gt;622 documents&lt;br&gt;Khmer tokeniser"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;verticalAlign=middle;"
+          vertex="1" parent="1">
+          <mxGeometry x="1325" y="275" width="200" height="65" as="geometry" />
+        </mxCell>
+
+        <mxCell id="chunksNode"
+          value="&lt;b&gt;chunks.pkl&lt;/b&gt;&lt;br&gt;Article metadata (622)&lt;br&gt;law, page, text, number"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;verticalAlign=middle;"
+          vertex="1" parent="1">
+          <mxGeometry x="1325" y="355" width="200" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- ════════════════════════════════════════════════════
+             LLM LAYER (dashed container, bottom right)
+        ════════════════════════════════════════════════════ -->
+        <mxCell id="llmBox"
+          style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 4;strokeColor=#000000;fillColor=none;strokeWidth=1.5;"
+          vertex="1" parent="1">
+          <mxGeometry x="1010" y="600" width="540" height="180" as="geometry" />
+        </mxCell>
+
+        <mxCell id="langgraphIcon"
+          value="&lt;b&gt;LangGraph&lt;/b&gt;&lt;br&gt;Agent Orchestration"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;verticalAlign=bottom;"
+          vertex="1" parent="1">
+          <mxGeometry x="1040" y="640" width="130" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="geminiFlashIcon"
+          value="&lt;b&gt;Gemini 2.5 Flash&lt;/b&gt;&lt;br&gt;Generation &amp; Classification"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;verticalAlign=bottom;"
+          vertex="1" parent="1">
+          <mxGeometry x="1215" y="640" width="140" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="geminiEmbedIcon"
+          value="&lt;b&gt;Gemini Embedding-001&lt;/b&gt;&lt;br&gt;Text Embeddings&lt;br&gt;dim=768"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;verticalAlign=bottom;"
+          vertex="1" parent="1">
+          <mxGeometry x="1395" y="640" width="130" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- LLM internal arrows -->
+        <mxCell id="e_lg_flash"
+          style="edgeStyle=none;rounded=0;strokeColor=#000000;strokeWidth=2;startArrow=classic;endArrow=classic;"
+          edge="1" source="langgraphIcon" target="geminiFlashIcon" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_flash_embed"
+          style="edgeStyle=none;rounded=0;strokeColor=#000000;strokeWidth=2;startArrow=classic;endArrow=classic;"
+          edge="1" source="geminiFlashIcon" target="geminiEmbedIcon" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ════════════════════════════════════════════════════
+             MAIN FLOW ARROWS (labeled, matching reference)
+        ════════════════════════════════════════════════════ -->
+
+        <!-- Chat UI → Intent (User Queries) -->
+        <mxCell id="e_query"
+          value="User Queries"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#000000;strokeWidth=1.5;endArrow=classic;fontSize=12;"
+          edge="1" source="chatUI" target="intentNode" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="470" y="225" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Intent → Chat UI (Asks for clarification) top loop -->
+        <mxCell id="e_clarify"
+          value="Asks for user clarification"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#000000;strokeWidth=1.5;endArrow=classic;fontSize=12;exitX=0.5;exitY=0;entryX=0.5;entryY=0;"
+          edge="1" source="intentNode" target="chatUI" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="770" y="115" />
+              <mxPoint x="295" y="115" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Generator → Chat UI (Bot Responses) -->
+        <mxCell id="e_response"
+          value="Bot Responses&#10;&amp; Citations"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#000000;strokeWidth=1.5;endArrow=classic;fontSize=12;exitX=0;exitY=0.5;entryX=1;entryY=0.7;"
+          edge="1" source="genNode" target="chatUI" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="470" y="370" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Intent → Retrieval (classification) -->
+        <mxCell id="e_classify"
+          value="classification"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#000000;strokeWidth=1.5;endArrow=classic;fontSize=12;exitX=1;exitY=0.5;entryX=0;entryY=0.5;"
+          edge="1" source="intentNode" target="retrievalNode" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Retrieval → KB (Interacts with Knowledge Base) -->
+        <mxCell id="e_kb"
+          value="Interacts with Knowledge Base"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#000000;strokeWidth=1.5;endArrow=classic;fontSize=12;exitX=1;exitY=0.4;entryX=0;entryY=0.3;"
+          edge="1" source="retrievalNode" target="faissNode" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- KB → Generator (retrieved chunks) -->
+        <mxCell id="e_chunks_gen"
+          value="Top-5 articles"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#000000;strokeWidth=1.5;endArrow=classic;fontSize=12;exitX=0.5;exitY=1;entryX=1;entryY=0.5;"
+          edge="1" source="chunksNode" target="genNode" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1425" y="455" />
+              <mxPoint x="1010" y="455" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Generator → Intent (retry, internal) -->
+        <mxCell id="e_retry"
+          value="retry &lt; 2 (rewrite query)"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#d32f2f;strokeWidth=1.5;endArrow=classic;fontSize=10;fontColor=#d32f2f;exitX=0;exitY=0.5;entryX=0;entryY=0.5;"
+          edge="1" source="genNode" target="intentNode" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="570" y="370" />
+              <mxPoint x="570" y="225" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Agentic ↔ LLM Layer (vertical double arrow) -->
+        <mxCell id="e_agentic_llm"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#000000;strokeWidth=2;startArrow=classic;endArrow=classic;exitX=0.5;exitY=1;entryX=0.2;entryY=0;"
+          edge="1" source="genNode" target="llmBox" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1080" y="540" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
