@@ -1,0 +1,12 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+.env.*
+*-sa-key.json
+sa-key.json
+.git/
+.gitignore
+.pytest_cache/
+*.log

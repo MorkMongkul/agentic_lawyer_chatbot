@@ -13,16 +13,28 @@ build/
 backend/.env
 .env
 .env.local
+
+# Secrets — Google service account keys (NEVER commit)
+sa-key.json
+backend/sa-key.json
+*-sa-key.json
+*.serviceaccount.json
 .env.*.local
 
-# Data & indexes — never commit these (too large + rebuiltable)
-backend/data/index/faiss.index
-backend/data/index/chunks.pkl
-backend/data/index/bm25.pkl
+# Index build checkpoint — not needed at runtime
 backend/data/index/embed_checkpoint.json
 
-# PDFs — too large for git
-backend/data/raw/*.pdf
+# Runtime indexes ARE committed (needed for Docker/EC2 deploy):
+#   backend/data/index/faiss.index
+#   backend/data/index/chunks.pkl
+#   backend/data/index/bm25.pkl
+
+# PDFs — ignore source PDFs, but keep the combined one (served at runtime)
+backend/data/raw/labor_laws.pdf
+backend/data/raw/minimum_wage_law.pdf
+backend/data/raw/social_security_law.pdf
+backend/data/raw/trade_union_law.pdf
+# backend/data/raw/cambodian_labor_laws.pdf  ← committed (served PDF)
 
 # JSONL source data — optional, keep if small enough (~5MB ok)
 # backend/law_chunks.jsonl

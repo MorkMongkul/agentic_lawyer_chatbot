@@ -1,0 +1,27 @@
+services:
+  backend:
+    build: ./backend
+    container_name: niti-backend
+    restart: unless-stopped
+    expose:
+      - "8000"
+    environment:
+      # Vertex AI config
+      GOOGLE_CLOUD_PROJECT: ${GOOGLE_CLOUD_PROJECT}
+      GOOGLE_CLOUD_LOCATION: ${GOOGLE_CLOUD_LOCATION:-us-central1}
+      # Service account key path (mounted below)
+      GOOGLE_APPLICATION_CREDENTIALS: /app/sa-key.json
+      # Database
+      DATABASE_URL: ${DATABASE_URL}
+    volumes:
+      # Mount the service account key (read-only) — never baked into the image
+      - ./backend/sa-key.json:/app/sa-key.json:ro
+
+  frontend:
+    build: ./frontend
+    container_name: niti-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
