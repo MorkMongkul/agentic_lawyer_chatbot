@@ -69,3 +69,5 @@ npm-debug.log*
 
 # ── OS ───────────────────────────────────────────────────────────
 Thumbs.db
+# Let's Encrypt certs (generated on server)
+certbot/

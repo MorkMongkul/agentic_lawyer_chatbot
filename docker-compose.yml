@@ -23,5 +23,19 @@ services:
     restart: unless-stopped
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - backend
+    volumes:
+      # Mount nginx config so it can be changed without rebuilding the image
+      - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      # Let's Encrypt certificates + ACME challenge webroot
+      - ./certbot/conf:/etc/letsencrypt:ro
+      - ./certbot/www:/var/www/certbot:ro
+
+  certbot:
+    image: certbot/certbot
+    container_name: niti-certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
