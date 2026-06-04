@@ -46,7 +46,15 @@ Create `.env` in the project root (same folder as `docker-compose.yml`):
 GOOGLE_CLOUD_PROJECT=gen-lang-client-0433481473
 GOOGLE_CLOUD_LOCATION=us-central1
 DATABASE_URL=postgresql://user:pass@ep-xxx.aws.neon.tech/neondb?sslmode=require
+
+# Clerk authentication (same key in both — backend verifies, frontend build bakes it in)
+CLERK_PUBLISHABLE_KEY=pk_test_xxxxx
+VITE_CLERK_PUBLISHABLE_KEY=pk_test_xxxxx
 ```
+
+> The `VITE_` key is consumed at **build time** by Vite (passed as a Docker
+> build arg via `docker-compose.yml`), so you must rebuild the frontend image
+> after changing it: `docker compose up -d --build`.
 
 ---
 

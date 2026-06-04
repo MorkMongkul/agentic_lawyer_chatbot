@@ -13,12 +13,18 @@ services:
       GOOGLE_APPLICATION_CREDENTIALS: /app/sa-key.json
       # Database
       DATABASE_URL: ${DATABASE_URL}
+      # Clerk auth (verifies session tokens; blank = anonymous-only)
+      CLERK_PUBLISHABLE_KEY: ${CLERK_PUBLISHABLE_KEY:-}
     volumes:
       # Mount the service account key
       - ./backend/sa-key.json:/app/sa-key.json:ro
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        # Baked into the Vite build so Clerk works in the browser
+        VITE_CLERK_PUBLISHABLE_KEY: ${VITE_CLERK_PUBLISHABLE_KEY:-}
     container_name: niti-frontend
     restart: unless-stopped
     ports:

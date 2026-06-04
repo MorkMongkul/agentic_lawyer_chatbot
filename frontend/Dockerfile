@@ -9,6 +9,12 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
+
+# Vite bakes VITE_* vars at build time, so the Clerk key must be present here.
+# Passed in from docker-compose as a build arg.
+ARG VITE_CLERK_PUBLISHABLE_KEY
+ENV VITE_CLERK_PUBLISHABLE_KEY=$VITE_CLERK_PUBLISHABLE_KEY
+
 RUN npm run build
 
 # ── Serve stage ──────────────────────────────────────────────
