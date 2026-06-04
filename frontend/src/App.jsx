@@ -1,39 +1,52 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Sidebar from './components/Sidebar/Sidebar'
 import ChatWindow from './components/Chat/ChatWindow'
 import PDFViewer from './components/PDFViewer/PDFViewer'
 import { useChat } from './hooks/useChat'
 import { usePDFViewer } from './hooks/usePDFViewer'
+import { api } from './services/api'
 
-export default function App() {
-  const chat      = useChat()
+export default function App({ getToken = null, isSignedIn = false, onRequireSignIn = null, AuthControls = null }) {
+  const chat      = useChat(getToken, onRequireSignIn)
   const pdfViewer = usePDFViewer()
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [isDark, setIsDark]           = useState(false)
-  const [sessions, setSessions] = useState([
-    { id: 'demo-1', title: 'ការបណ្តេញបុគ្គលិកដោយ...', time: 'ថ្ងៃនេះ' },
-    { id: 'demo-2', title: 'ប្រាក់ឈ្នួលអប្បបរមា', time: 'ម្សិលមិញ' },
-  ])
-  const [activeSession, setActiveSession] = useState('demo-1')
+  const [sessions, setSessions]       = useState([])
+  const [activeSession, setActiveSession] = useState(null)
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light')
   }, [isDark])
 
-  const handleNewSession = () => {
-    const id = `session-${Date.now()}`
-    setSessions(prev => [{ id, title: 'ការសន្ទនាថ្មី', time: 'ឥឡូវ' }, ...prev])
+  // Load the signed-in user's saved sessions for the sidebar.
+  const refreshSessions = useCallback(async () => {
+    if (!isSignedIn || !getToken) { setSessions([]); return }
+    const token = await getToken()
+    const data  = await api.listSessions(token)
+    setSessions(data.sessions || [])
+  }, [isSignedIn, getToken])
+
+  useEffect(() => { refreshSessions() }, [refreshSessions])
+
+  // Track the active session as the chat hook creates/loads one.
+  useEffect(() => {
+    if (chat.sessionId) setActiveSession(chat.sessionId)
+  }, [chat.sessionId])
+
+  const handleNewSession = async () => {
+    await chat.newSession()
+    refreshSessions()
+  }
+
+  const handleSelectSession = (id) => {
     setActiveSession(id)
-    chat.newSession()
+    chat.loadSession(id)
   }
 
   const handleSend = (text) => {
     chat.sendMessage(text)
-    setSessions(prev => prev.map(s =>
-      s.id === activeSession && s.title === 'ការសន្ទនាថ្មី'
-        ? { ...s, title: text.length > 24 ? text.slice(0, 24) + '...' : text }
-        : s
-    ))
+    // Give the backend a moment to persist, then refresh the sidebar list.
+    if (isSignedIn) setTimeout(refreshSessions, 1500)
   }
 
   return (
@@ -41,15 +54,23 @@ export default function App() {
       <Sidebar
         sessions={sessions}
         activeSession={activeSession}
-        onSelectSession={(id) => { setActiveSession(id); chat.newSession() }}
+        onSelectSession={handleSelectSession}
         onNewSession={handleNewSession}
         isOpen={sidebarOpen}
         onToggle={() => setSidebarOpen(o => !o)}
         isDark={isDark}
         onToggleTheme={() => setIsDark(d => !d)}
+        AuthControls={AuthControls}
+        isSignedIn={isSignedIn}
       />
 
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden', position: 'relative', minWidth: 0 }}>
+        {/* Auth controls float top-right when Clerk is configured */}
+        {AuthControls && (
+          <div style={{ position: 'absolute', top: 12, right: 16, zIndex: 20 }}>
+            <AuthControls />
+          </div>
+        )}
         <ChatWindow
           messages={chat.messages}
           isStreaming={chat.isStreaming}

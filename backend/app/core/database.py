@@ -53,4 +53,19 @@ async def init_db(pool: asyncpg.Pool):
 
             CREATE INDEX IF NOT EXISTS idx_messages_session
                 ON chat_messages(session_id, created_at);
+
+            -- Auth: associate sessions with a Clerk user (NULL = anonymous)
+            ALTER TABLE chat_sessions
+                ADD COLUMN IF NOT EXISTS user_id TEXT;
+
+            CREATE INDEX IF NOT EXISTS idx_sessions_user
+                ON chat_sessions(user_id, updated_at DESC);
+
+            -- Free-tier quota for anonymous visitors, keyed by an httpOnly cookie id
+            CREATE TABLE IF NOT EXISTS anonymous_usage (
+                anon_id        TEXT PRIMARY KEY,
+                question_count INTEGER     NOT NULL DEFAULT 0,
+                created_at     TIMESTAMPTZ DEFAULT NOW(),
+                updated_at     TIMESTAMPTZ DEFAULT NOW()
+            );
         """)

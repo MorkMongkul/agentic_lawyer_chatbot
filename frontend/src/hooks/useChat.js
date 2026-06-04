@@ -1,19 +1,32 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { api } from '../services/api'
 
-export function useChat() {
+const noToken = async () => null
+const noop    = () => {}
+
+export function useChat(getToken = noToken, onRequireSignIn = noop) {
   const [sessionId,   setSessionId]   = useState(null)
   const [messages,    setMessages]    = useState([])
   const [isStreaming, setIsStreaming] = useState(false)
   const [status,      setStatus]      = useState('')
   const cancelRef = useRef(null)
 
+  // Keep the latest getToken in a ref so callbacks always use the current one.
+  const tokenRef = useRef(getToken || noToken)
+  useEffect(() => { tokenRef.current = getToken || noToken }, [getToken])
+
+  const signInRef = useRef(onRequireSignIn || noop)
+  useEffect(() => { signInRef.current = onRequireSignIn || noop }, [onRequireSignIn])
+
   useEffect(() => {
-    api.createSession().then((data) => setSessionId(data.session_id))
+    tokenRef.current().then((t) =>
+      api.createSession(t).then((data) => setSessionId(data.session_id))
+    )
   }, [])
 
-  const sendMessage = useCallback((text) => {
+  const sendMessage = useCallback(async (text) => {
     if (!text.trim() || isStreaming || !sessionId) return
+    const token = await tokenRef.current()
     const userMsg = { id: Date.now(), role: 'user', content: text }
     setMessages((prev) => [...prev, userMsg])
     setIsStreaming(true)
@@ -43,6 +56,21 @@ export function useChat() {
           setIsStreaming(false)
           setStatus('')
           break
+        case 'limit':
+          setMessages((prev) => prev.map((m) =>
+            m.id === aiId
+              ? {
+                  ...m,
+                  content: 'សូមចូលគណនីដើម្បីបន្តសួរសំណួរបន្ថែម។',
+                  streaming: false,
+                  requireSignIn: true,
+                }
+              : m
+          ))
+          setIsStreaming(false)
+          setStatus('')
+          signInRef.current()   // open the Clerk sign-in modal
+          break
         case 'error':
           setMessages((prev) => prev.map((m) =>
             m.id === aiId
@@ -53,16 +81,36 @@ export function useChat() {
           setStatus('')
           break
       }
-    })
+    }, token)
   }, [sessionId, isStreaming])
 
-  const newSession = useCallback(() => {
+  const newSession = useCallback(async () => {
     if (cancelRef.current) cancelRef.current()
     setMessages([])
     setIsStreaming(false)
     setStatus('')
-    api.createSession().then((data) => setSessionId(data.session_id))
+    const token = await tokenRef.current()
+    const data  = await api.createSession(token)
+    setSessionId(data.session_id)
   }, [])
 
-  return { messages, isStreaming, status, sessionId, sendMessage, newSession }
+  // Load an existing session's history into the chat (sidebar click).
+  const loadSession = useCallback(async (id) => {
+    if (cancelRef.current) cancelRef.current()
+    setIsStreaming(false)
+    setStatus('')
+    const token = await tokenRef.current()
+    const data  = await api.getHistory(id, token)
+    if (!data) { setMessages([]); setSessionId(id); return }
+    setMessages(data.messages.map((m, i) => ({
+      id:        `${id}-${i}`,
+      role:      m.role,
+      content:   m.content,
+      citations: m.citations || [],
+      streaming: false,
+    })))
+    setSessionId(id)
+  }, [])
+
+  return { messages, isStreaming, status, sessionId, sendMessage, newSession, loadSession }
 }

@@ -7,6 +7,9 @@ class Settings(BaseSettings):
     google_cloud_project:    str
     google_cloud_location:   str = "us-central1"
 
+    # Clerk authentication (optional — blank disables auth, app stays anonymous)
+    clerk_publishable_key:   str = ""
+
     index_dir:        str = "data/index"
     data_dir:         str = "data/raw"
 
@@ -23,6 +26,7 @@ class Settings(BaseSettings):
         env_file          = ".env"
         env_file_encoding = "utf-8"
         case_sensitive    = False
+        extra             = "ignore"   # tolerate unrelated vars (e.g. VITE_*) in .env
 
 @lru_cache()
 def get_settings() -> Settings:

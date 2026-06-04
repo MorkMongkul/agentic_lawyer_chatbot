@@ -1,31 +1,58 @@
 const BASE_URL = '/api'
 
+// Build headers, attaching the Clerk bearer token when signed in.
+function authHeaders(token, extra = {}) {
+  const h = { ...extra }
+  if (token) h['Authorization'] = `Bearer ${token}`
+  return h
+}
+
 export const api = {
-  createSession: async () => {
+  createSession: async (token) => {
     const res = await fetch(`${BASE_URL}/chat/session`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: authHeaders(token, { 'Content-Type': 'application/json' }),
     })
     return res.json()
   },
 
-  getHistory: async (sessionId) => {
-    const res = await fetch(`${BASE_URL}/chat/${sessionId}/history`)
+  getHistory: async (sessionId, token) => {
+    const res = await fetch(`${BASE_URL}/chat/${sessionId}/history`, {
+      headers: authHeaders(token),
+    })
     if (!res.ok) return null
+    return res.json()
+  },
+
+  listSessions: async (token) => {
+    const res = await fetch(`${BASE_URL}/chat/sessions`, {
+      headers: authHeaders(token),
+    })
+    if (!res.ok) return { sessions: [] }
     return res.json()
   },
 
   getPDFUrl: (filename) => `${BASE_URL}/documents/${filename}`,
 
-  streamChat: (message, sessionId, onEvent) => {
+  streamChat: (message, sessionId, onEvent, token) => {
     const controller = new AbortController()
     fetch(`${BASE_URL}/chat`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: authHeaders(token, { 'Content-Type': 'application/json' }),
       body: JSON.stringify({ message, session_id: sessionId }),
+      credentials: 'same-origin',   // send/receive the anon-quota cookie
       signal: controller.signal,
     })
       .then(async (res) => {
+        // Anonymous free-tier quota exhausted → prompt sign-in
+        if (res.status === 403) {
+          let data = {}
+          try { data = await res.json() } catch { /* ignore */ }
+          if (data.error === 'anonymous_limit_reached') {
+            onEvent({ type: 'limit', limit: data.limit })
+            return
+          }
+        }
         const reader  = res.body.getReader()
         const decoder = new TextDecoder()
         let buffer    = ''
