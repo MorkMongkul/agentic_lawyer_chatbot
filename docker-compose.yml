@@ -9,12 +9,12 @@ services:
       # Vertex AI config
       GOOGLE_CLOUD_PROJECT: ${GOOGLE_CLOUD_PROJECT}
       GOOGLE_CLOUD_LOCATION: ${GOOGLE_CLOUD_LOCATION:-us-central1}
-      # Service account key path (mounted below)
+      # Service account key path
       GOOGLE_APPLICATION_CREDENTIALS: /app/sa-key.json
       # Database
       DATABASE_URL: ${DATABASE_URL}
     volumes:
-      # Mount the service account key (read-only) — never baked into the image
+      # Mount the service account key
       - ./backend/sa-key.json:/app/sa-key.json:ro
 
   frontend:
