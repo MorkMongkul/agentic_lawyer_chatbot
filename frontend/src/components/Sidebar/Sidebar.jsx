@@ -259,9 +259,9 @@ export default function Sidebar({
         </div>
       </div>
 
-      {/* Theme toggle */}
+      {/* Footer — theme toggle */}
       <div style={{
-        flexShrink: 0, padding: '6px 12px',
+        flexShrink: 0, padding: '6px 12px 14px',
         display: 'flex', justifyContent: isOpen ? 'flex-end' : 'center',
       }}>
         <button
@@ -278,30 +278,6 @@ export default function Sidebar({
         >
           {isDark ? <IconSun /> : <IconMoon />}
         </button>
-      </div>
-
-      {/* Footer */}
-      <div style={{
-        flexShrink: 0,
-        padding: '4px 14px 14px',
-        display: 'flex', alignItems: 'center', gap: 10,
-        justifyContent: isOpen ? 'flex-start' : 'center',
-      }}>
-        <div style={{
-          width: 32, height: 32, borderRadius: '50%',
-          background: '#BAEC17', display: 'flex',
-          alignItems: 'center', justifyContent: 'center',
-          fontSize: 13, fontWeight: 700, color: '#111111',
-          flexShrink: 0, cursor: 'default',
-        }}>អ</div>
-        {isOpen && (
-          <>
-            <span style={{ fontSize: 13, color: 'var(--text)', fontWeight: 500, whiteSpace: 'nowrap' }}>
-              អ្នកប្រើប្រាស់
-            </span>
-            <div style={{ marginLeft: 'auto', width: 7, height: 7, borderRadius: '50%', background: '#BAEC17', flexShrink: 0 }} />
-          </>
-        )}
       </div>
     </div>
   )
