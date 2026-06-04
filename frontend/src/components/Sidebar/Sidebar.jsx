@@ -131,7 +131,7 @@ export default function Sidebar({
         {isOpen && (
           <>
             <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--text)', whiteSpace: 'nowrap', flex: 1 }}>
-              Niti
+              Nitti
             </span>
             <button
               onClick={onToggle}
