@@ -5,30 +5,32 @@ const CARDS = [
   { title: 'ច្បាប់ស្តីពីប្រាក់ឈ្នួលអប្បបរមា', desc: 'អប្បបរមា · ការពិភាក្សា · ក្រុមប្រឹក្សា' },
 ]
 
+import { useWindowWidth } from '../../hooks/useWindowWidth'
+
 export default function WelcomeScreen({ onSuggestion, isDark }) {
+  const width = useWindowWidth()
+  const isMobile = width < 640
   const cardBase = isDark ? '#1C1C1C' : '#fff'
   const cardBorder = isDark ? 'rgba(255,255,255,0.10)' : '#E4E4E4'
 
   return (
     <div style={{
       display: 'flex', flexDirection: 'column', alignItems: 'center',
-      gap: 28, padding: '0 24px', width: '100%',
+      gap: isMobile ? 20 : 28, padding: '0 4px', width: '100%',
     }}>
-      <div style={{ textAlign: 'center' }}>
-        <div style={{ fontSize: 32, fontWeight: 700, color: 'var(--text)', lineHeight: 1.25, marginBottom: 4 }}>
-          ជំនួយការច្បាប់ការងារ
-        </div>
-        <div style={{ fontSize: 30, fontWeight: 700, color: 'var(--text)', lineHeight: 1.25, marginBottom: 14, opacity: 0.7 }}>
+      <div style={{ textAlign: 'center', padding: '0 8px' }}>
+        <div style={{ fontSize: isMobile ? 22 : 30, fontWeight: 700, color: 'var(--text)', lineHeight: 1.3, marginBottom: 10, opacity: 0.7 }}>
           តើខ្ញុំអាចជួយអ្នកដោយរបៀបណា?
         </div>
-        <div style={{ fontSize: 14, color: 'var(--text-dim)', lineHeight: 1.7 }}>
+        <div style={{ fontSize: isMobile ? 13 : 14, color: 'var(--text-dim)', lineHeight: 1.7 }}>
           ជ្រើសរើសសំណួរខាងក្រោម ឬសរសេរសំណួររបស់អ្នកផ្ទាល់ ដើម្បីចាប់ផ្តើម
         </div>
       </div>
 
       <div style={{
-        display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: 10, width: '100%', maxWidth: 720,
+        display: 'grid',
+        gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
+        gap: isMobile ? 8 : 10, width: '100%', maxWidth: 720,
       }}>
         {CARDS.map(c => (
           <button

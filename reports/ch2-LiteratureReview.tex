@@ -1,0 +1,162 @@
+\mychapter{II. LITERATURE REVIEW}{II. LITERATURE REVIEW}
+
+\hs Several research fields come together in this project: natural language processing,
+information retrieval, and the growing area of legal technology. This chapter reviews the
+work most relevant to the system proposed here. It moves from the general idea of
+retrieval-augmented generation, through the retrieval methods that make it work, toward
+the more recent developments in query rewriting, legal question answering, agentic
+reasoning, and the particular difficulties of low-resource languages such as Khmer.
+
+\section{Retrieval-Augmented Generation (RAG)}
+
+\hs The idea of Retrieval-Augmented Generation was introduced by \citet{lewis2020rag}.
+Rather than relying on a model to recall facts from its parameters alone, their framework
+first retrieves relevant documents from a dense vector index and then conditions
+generation on those documents. On open-domain question answering benchmarks, this
+combination outperformed models that depended only on parametric memory. The significance
+of the result was that grounding generation in retrieved evidence became a practical and
+repeatable recipe. It is the same recipe that this thesis adapts for the legal domain,
+where an answer that cannot be traced back to a specific provision is of little use.
+
+\section{Dense and Sparse Retrieval Methods}
+
+\hs Retrieval comes in two broad forms, and both matter here. The dense form is well
+represented by Dense Passage Retrieval, or DPR, from \citet{karpukhin2020dpr}. DPR
+encodes queries and passages with bi-encoder neural networks into a shared vector space,
+and on open-domain QA it clearly improved over keyword matching. The same work is candid
+about a weakness, however. When a query hinges on a rare or very specific term, dense
+retrieval can miss it, because such terms are thinly represented in the learned space.
+For legal text in a low-resource language like Khmer, that weakness is hard to ignore.
+
+\hs The sparse form has a much longer history. \citet{robertson2009bm25} formalised
+BM25, which scores documents using term frequency, inverse document frequency, and a
+correction for document length. It is a simple model, yet it has stayed competitive for
+decades and still powers many production search systems. BM25 is a natural fit for legal
+retrieval for one plain reason: legal language is exact. Whether a specific legal term
+actually appears in an article often tells you more than how semantically similar the
+article feels.
+
+\hs On the engineering side, \citet{johnson2021faiss} developed FAISS, a library built
+for fast similarity search across large sets of dense vectors. It supports both exact
+search and approximate methods, which makes dense retrieval feasible at scale. The system
+in this thesis uses FAISS with a flat inner product index, giving exact cosine similarity
+over the indexed article embeddings.
+
+\section{Hybrid Retrieval and Rank Fusion}
+
+\hs Reading the dense and sparse literature side by side suggests an obvious move:
+combine them. The two approaches fail in different ways. Dense retrieval understands
+meaning even when the wording changes, as \citet{karpukhin2020dpr} showed, while BM25
+catches the exact terms that dense methods sometimes overlook, as the durability of
+\citet{robertson2009bm25} attests. Their weaknesses do not overlap, so together they
+cover more ground than either does alone. This is especially helpful when a casual Khmer
+question and a formal legal article barely share any vocabulary.
+
+\hs The remaining question is how to merge two ranked lists, and here this work follows
+\citet{cormack2009rrf}. Their Reciprocal Rank Fusion combines rankings without having to
+normalise scores across systems, using the formula
+$\text{RRF}(d) = \sum_{r \in R} \frac{1}{k + r(d)}$, where $k$ is a smoothing constant
+and $r(d)$ is the rank of document $d$ in list $r$. Despite its simplicity, RRF was shown
+to beat both the individual rankers and several more elaborate fusion schemes. That
+balance of robustness and simplicity is why it was chosen to fuse the FAISS and BM25
+results before the top-K articles are selected.
+
+\section{Query Rewriting for Retrieval}
+
+\hs Good retrieval depends not only on the index but on the query that reaches it. This
+becomes a real problem when users write informally and the target documents are written
+formally, which is exactly the situation in Cambodian legal search.
+\citet{ma2023queryrewriting} examined this directly and showed that placing a rewriting
+step before retrieval, so that the original question is reshaped into a form better suited
+to the retriever, measurably improves the answers a RAG system produces. Their finding
+supports one of the central design choices in this thesis, namely the dedicated query
+rewriting stage that expands an everyday Khmer question into the formal legal vocabulary
+likely to appear in the law itself.
+
+\section{Legal Question Answering Systems}
+
+\hs Applying language models to law brings its own risks, and recent work has tried to
+measure them carefully. \citet{guha2023legalbench} assembled LegalBench, a broad benchmark
+of legal reasoning tasks built collaboratively by legal and machine learning experts.
+Their results make a point that is directly relevant here: general-purpose language models
+can sound fluent on legal questions while still reasoning incorrectly. For a system meant
+to give the public legal information, that gap between fluency and correctness is exactly
+why this work grounds every answer in retrieved articles rather than trusting the model's
+own knowledge. It also explains the inclusion of a grounding check that confirms the
+retrieved articles are relevant before any answer is written.
+
+\section{Agentic RAG and Reasoning Frameworks}
+
+\hs A more recent line of work treats the system as something that decides what to do,
+not just something that retrieves and generates in a fixed order. \citet{yao2023react}
+introduced ReAct, which interleaves reasoning steps with concrete actions so that a
+language model can fetch information and adjust course as it goes. The result was a clear
+improvement over approaches that only reason or only retrieve. The pipeline in this thesis
+shares that philosophy: it uses a directed state graph to judge a query's intent and the
+quality of its retrieval before committing to an answer.
+
+\hs The most directly related system is Self-RAG, proposed by \citet{asai2024selfrag}.
+There, the model learns to decide when to retrieve, and then to critique both the
+retrieved passages and its own draft answer using special reflection tokens. The grounding
+check in this thesis pursues the same goal by simpler means, judging whether the retrieved
+articles are relevant and, if they are not, rewriting the query and trying again before
+allowing generation to proceed. Self-RAG shows that this kind of self-assessment is not
+just a safeguard but a genuine source of quality, which is reassuring for a legal setting
+where a wrong answer carries real consequences.
+
+\section{Low-Resource Languages}
+
+\hs Almost all of the work above was developed and tested in high-resource languages, and
+Khmer is not among them. The SeaLLMs project by \citet{nguyen2023seallms} is one of the
+few efforts to build large language models specifically for Southeast Asian languages,
+Khmer included, and it documents the familiar difficulties of limited training data and
+uneven tokenisation that such languages face. Their work helps explain why a purely
+neural, embedding-based approach is risky for Khmer legal text. It also strengthens the
+case made earlier for pairing dense retrieval with BM25, so that exact-term matching can
+compensate in the many cases where the embeddings, trained on little Khmer, fall short.
+
+\section{Summary of Related Work}
+
+\hs Table~\ref{tab:literature_summary} brings these studies together and notes how each
+one connects to the system proposed in this thesis.
+
+\begin{table}[H]
+\centering
+\caption{Summary of Related Work}
+\label{tab:literature_summary}
+\begin{tabular}{p{4cm} p{3.5cm} p{6cm}}
+\hline
+\textbf{Study} & \textbf{Method} & \textbf{Relevance to This Work} \\
+\hline
+\citet{lewis2020rag} & RAG &
+Foundation of the proposed RAG pipeline \\
+\hline
+\citet{karpukhin2020dpr} & Dense Retrieval (DPR) &
+Basis for the FAISS dense retrieval component \\
+\hline
+\citet{robertson2009bm25} & BM25 &
+Basis for the BM25 sparse retrieval component \\
+\hline
+\citet{johnson2021faiss} & FAISS &
+Library used for dense vector indexing \\
+\hline
+\citet{cormack2009rrf} & RRF &
+Fusion method for hybrid retrieval \\
+\hline
+\citet{ma2023queryrewriting} & Query Rewriting &
+Motivates the query rewriting stage \\
+\hline
+\citet{guha2023legalbench} & LegalBench &
+Motivates grounding over parametric knowledge \\
+\hline
+\citet{yao2023react} & ReAct &
+Basis for the agentic pipeline design \\
+\hline
+\citet{asai2024selfrag} & Self-RAG &
+Closest parallel to the grounding stage \\
+\hline
+\citet{nguyen2023seallms} & SeaLLMs &
+Motivates hybrid retrieval for Khmer \\
+\hline
+\end{tabular}
+\end{table}

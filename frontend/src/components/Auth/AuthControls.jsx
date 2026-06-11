@@ -9,15 +9,16 @@ export default function AuthControls() {
         <SignInButton mode="modal">
           <button
             style={{
-              padding: '8px 16px',
+              padding: '5px 12px',
               borderRadius: 8,
               border: '1px solid var(--border, #ddd)',
               background: '#BAEC17',
               color: '#1a1a1a',
               fontWeight: 600,
-              fontSize: 14,
+              fontSize: 13,
               cursor: 'pointer',
               fontFamily: 'inherit',
+              whiteSpace: 'nowrap',
             }}
           >
             ចូលគណនី

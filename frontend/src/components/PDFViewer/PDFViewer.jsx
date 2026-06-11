@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import * as pdfjsLib from 'pdfjs-dist'
+import { useWindowWidth } from '../../hooks/useWindowWidth'
 
 pdfjsLib.GlobalWorkerOptions.workerSrc =
   `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`
@@ -20,6 +21,8 @@ const toDigitalPage = (cit) => {
 }
 
 export default function PDFViewer({ isOpen, citation, pdfUrl, onClose }) {
+  const viewWidth = useWindowWidth()
+  const isMobile  = viewWidth < 640
   const canvasRef  = useRef(null)
   const pdfRef     = useRef(null)
   const [page,     setPage]     = useState(1)
@@ -86,13 +89,16 @@ export default function PDFViewer({ isOpen, citation, pdfUrl, onClose }) {
 
   return (
     <div style={{
-      position: 'absolute', top: 0, right: 0,
-      width: 420, height: '100%',
-      background: '#fff', borderLeft: '1px solid #E4E4E4',
+      position: isMobile ? 'fixed' : 'absolute',
+      top: 0, right: 0,
+      width: isMobile ? '100%' : 420,
+      height: '100%',
+      background: '#fff', borderLeft: isMobile ? 'none' : '1px solid #E4E4E4',
       display: 'flex', flexDirection: 'column',
       transform: isOpen ? 'translateX(0)' : 'translateX(100%)',
       transition: 'transform .25s ease',
-      zIndex: 50, boxShadow: isOpen ? '-4px 0 20px rgba(0,0,0,.06)' : 'none'
+      zIndex: isMobile ? 300 : 50,
+      boxShadow: isOpen ? (isMobile ? 'none' : '-4px 0 20px rgba(0,0,0,.06)') : 'none',
     }}>
 
       {/* Header */}

@@ -1,7 +1,7 @@
 import ReactMarkdown from 'react-markdown'
 import CitationChip from './CitationChip'
 
-export default function MessageBubble({ message, onCitationClick }) {
+export default function MessageBubble({ message, onCitationClick, isMobile = false }) {
   const isUser = message.role === 'user'
 
   return (
@@ -9,7 +9,7 @@ export default function MessageBubble({ message, onCitationClick }) {
       display: 'flex',
       justifyContent: isUser ? 'flex-end' : 'flex-start',
     }}>
-      <div style={{ maxWidth: isUser ? '72%' : '90%', minWidth: 0 }}>
+      <div style={{ maxWidth: isUser ? (isMobile ? '85%' : '72%') : '95%', minWidth: 0 }}>
         <div style={{
           padding: isUser ? '10px 16px' : '2px 0',
           borderRadius: isUser ? 18 : 0,

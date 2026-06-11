@@ -4,11 +4,14 @@ import ChatWindow from './components/Chat/ChatWindow'
 import PDFViewer from './components/PDFViewer/PDFViewer'
 import { useChat } from './hooks/useChat'
 import { usePDFViewer } from './hooks/usePDFViewer'
+import { useWindowWidth } from './hooks/useWindowWidth'
 import { api } from './services/api'
 
 export default function App({ getToken = null, isSignedIn = false, onRequireSignIn = null, AuthControls = null }) {
   const chat      = useChat(getToken, onRequireSignIn)
   const pdfViewer = usePDFViewer()
+  const width     = useWindowWidth()
+  const isMobile  = width < 640
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [isDark, setIsDark]           = useState(false)
   const [sessions, setSessions]       = useState([])
@@ -36,11 +39,25 @@ export default function App({ getToken = null, isSignedIn = false, onRequireSign
   const handleNewSession = async () => {
     await chat.newSession()
     refreshSessions()
+    if (isMobile) setSidebarOpen(false)
   }
 
   const handleSelectSession = (id) => {
     setActiveSession(id)
     chat.loadSession(id)
+    if (isMobile) setSidebarOpen(false)
+  }
+
+  const handleDeleteSession = async (id) => {
+    if (!isSignedIn || !getToken) return
+    const token = await getToken()
+    try {
+      await api.deleteSession(id, token)
+    } catch { /* ignore if already gone */ }
+    setSessions(prev => prev.filter(s => s.id !== id))
+    if (activeSession === id) {
+      await chat.newSession()
+    }
   }
 
   const handleSend = (text) => {
@@ -56,20 +73,27 @@ export default function App({ getToken = null, isSignedIn = false, onRequireSign
         activeSession={activeSession}
         onSelectSession={handleSelectSession}
         onNewSession={handleNewSession}
+        onDeleteSession={handleDeleteSession}
         isOpen={sidebarOpen}
         onToggle={() => setSidebarOpen(o => !o)}
         isDark={isDark}
         onToggleTheme={() => setIsDark(d => !d)}
         AuthControls={AuthControls}
         isSignedIn={isSignedIn}
+        isMobile={isMobile}
       />
 
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden', position: 'relative', minWidth: 0 }}>
-        {/* Auth controls float top-right when Clerk is configured */}
-        {AuthControls && (
-          <div style={{ position: 'absolute', top: 12, right: 16, zIndex: 20 }}>
-            <AuthControls />
-          </div>
+        {/* Backdrop — closes the sidebar overlay on any screen size */}
+        {sidebarOpen && (
+          <div
+            onClick={() => setSidebarOpen(false)}
+            style={{
+              position: 'fixed', inset: 0,
+              background: 'rgba(0,0,0,0.45)',
+              zIndex: 150,
+            }}
+          />
         )}
         <ChatWindow
           messages={chat.messages}
@@ -81,6 +105,7 @@ export default function App({ getToken = null, isSignedIn = false, onRequireSign
           sidebarOpen={sidebarOpen}
           onToggleSidebar={() => setSidebarOpen(o => !o)}
           isDark={isDark}
+          AuthControls={AuthControls}
         />
         <PDFViewer
           isOpen={pdfViewer.isOpen}

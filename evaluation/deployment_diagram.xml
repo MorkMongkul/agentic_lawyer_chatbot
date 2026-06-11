@@ -1,6 +1,6 @@
 <mxfile>
   <diagram name="Deployment Diagram">
-    <mxGraphModel dx="1200" dy="800" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="1400" dy="900" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1300" pageHeight="900" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -10,158 +10,220 @@
           value="System Deployment Diagram"
           style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=18;fontStyle=1;"
           vertex="1" parent="1">
-          <mxGeometry x="380" y="20" width="400" height="30" as="geometry" />
+          <mxGeometry x="450" y="16" width="400" height="30" as="geometry" />
         </mxCell>
 
         <!-- ══════════════════════════════════════════
-             CLIENT DEVICE
+             CLIENT
         ══════════════════════════════════════════ -->
         <mxCell id="clientNode"
           value="&lt;b&gt;«device»&lt;/b&gt;&lt;br&gt;User Device"
-          style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;fontStyle=1;verticalAlign=top;spacingTop=8;"
+          style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;fontStyle=1;verticalAlign=top;spacingTop=8;dashed=0;"
           vertex="1" parent="1">
-          <mxGeometry x="60" y="90" width="200" height="120" as="geometry" />
+          <mxGeometry x="80" y="80" width="230" height="120" as="geometry" />
         </mxCell>
 
         <mxCell id="browser"
-          value="&lt;b&gt;Web Browser&lt;/b&gt;&lt;br&gt;(Chrome / Edge / Safari)"
+          value="&lt;b&gt;Web Browser&lt;/b&gt;&lt;br&gt;React SPA (signed-in or anonymous)"
           style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;"
           vertex="1" parent="1">
-          <mxGeometry x="80" y="135" width="160" height="55" as="geometry" />
+          <mxGeometry x="100" y="118" width="190" height="62" as="geometry" />
         </mxCell>
 
         <!-- ══════════════════════════════════════════
-             FRONTEND HOST (Vercel)
+             DNS / DOMAIN
         ══════════════════════════════════════════ -->
-        <mxCell id="vercelNode"
-          value="&lt;b&gt;«cloud»&lt;/b&gt;&lt;br&gt;Frontend Host — Vercel"
-          style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;fontStyle=1;verticalAlign=top;spacingTop=8;"
+        <mxCell id="dnsNode"
+          value="&lt;b&gt;DNS — nitti.tech&lt;/b&gt;&lt;br&gt;A record → Elastic IP&lt;br&gt;CNAMEs → Clerk"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;"
           vertex="1" parent="1">
-          <mxGeometry x="60" y="280" width="230" height="120" as="geometry" />
-        </mxCell>
-
-        <mxCell id="reactApp"
-          value="&lt;b&gt;React SPA&lt;/b&gt;&lt;br&gt;(static build via Vite)"
-          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;"
-          vertex="1" parent="1">
-          <mxGeometry x="85" y="325" width="180" height="55" as="geometry" />
+          <mxGeometry x="100" y="250" width="190" height="70" as="geometry" />
         </mxCell>
 
         <!-- ══════════════════════════════════════════
-             BACKEND HOST (Cloud Server)
+             AWS EC2 INSTANCE (big container)
         ══════════════════════════════════════════ -->
-        <mxCell id="backendNode"
-          value="&lt;b&gt;«cloud»&lt;/b&gt;&lt;br&gt;Backend Host — Cloud Server (port 8000)"
-          style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;fontStyle=1;verticalAlign=top;spacingTop=8;"
+        <mxCell id="ec2Node"
+          value="&lt;b&gt;«cloud» AWS EC2 — t3.small (Ubuntu)&lt;/b&gt;&amp;nbsp;&amp;nbsp;Elastic IP&lt;br&gt;&lt;i&gt;Docker Compose&lt;/i&gt;"
+          style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff9e6;strokeColor=#d79b00;fontSize=13;fontStyle=1;verticalAlign=top;spacingTop=8;dashed=0;strokeWidth=2;"
           vertex="1" parent="1">
-          <mxGeometry x="430" y="250" width="320" height="290" as="geometry" />
+          <mxGeometry x="420" y="80" width="470" height="430" as="geometry" />
         </mxCell>
 
-        <mxCell id="uvicorn"
-          value="&lt;b&gt;Uvicorn (ASGI Server)&lt;/b&gt;"
-          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;verticalAlign=top;spacingTop=6;"
+        <!-- Frontend container (Nginx) -->
+        <mxCell id="nginxBox"
+          value="&lt;b&gt;Container: niti-frontend&lt;/b&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontStyle=1;verticalAlign=top;spacingTop=6;"
           vertex="1" parent="1">
-          <mxGeometry x="450" y="290" width="280" height="230" as="geometry" />
+          <mxGeometry x="445" y="130" width="420" height="120" as="geometry" />
         </mxCell>
 
-        <mxCell id="fastapiApp"
-          value="&lt;b&gt;FastAPI Application&lt;/b&gt;&lt;br&gt;CORS · whitelisted PDF endpoint"
-          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#388e3c;fontSize=11;verticalAlign=top;spacingTop=6;"
+        <mxCell id="nginx"
+          value="&lt;b&gt;Nginx&lt;/b&gt;&lt;br&gt;• Serves React build (static)&lt;br&gt;• Reverse proxy /api → backend&lt;br&gt;• HTTPS / SSL termination&lt;br&gt;• Ports 80 / 443"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=10;align=left;spacingLeft=8;"
           vertex="1" parent="1">
-          <mxGeometry x="465" y="325" width="250" height="180" as="geometry" />
+          <mxGeometry x="460" y="160" width="250" height="80" as="geometry" />
         </mxCell>
 
-        <mxCell id="agentPipe"
-          value="&lt;b&gt;Agentic RAG Pipeline&lt;/b&gt;&lt;br&gt;(LangGraph)"
-          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;"
+        <mxCell id="reactStatic"
+          value="&lt;b&gt;React SPA&lt;/b&gt;&lt;br&gt;(Vite build,&lt;br&gt;Clerk key baked in)"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=10;"
           vertex="1" parent="1">
-          <mxGeometry x="480" y="360" width="220" height="50" as="geometry" />
+          <mxGeometry x="725" y="160" width="125" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Backend container (FastAPI) -->
+        <mxCell id="backendBox"
+          value="&lt;b&gt;Container: niti-backend&lt;/b&gt;"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontStyle=1;verticalAlign=top;spacingTop=6;"
+          vertex="1" parent="1">
+          <mxGeometry x="445" y="270" width="420" height="150" as="geometry" />
+        </mxCell>
+
+        <mxCell id="fastapi"
+          value="&lt;b&gt;FastAPI + Uvicorn&lt;/b&gt;&lt;br&gt;Agentic RAG pipeline (LangGraph)&lt;br&gt;Clerk JWT verification&lt;br&gt;Port 8000 (internal)"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9673a6;fontSize=10;align=left;spacingLeft=8;"
+          vertex="1" parent="1">
+          <mxGeometry x="460" y="300" width="240" height="100" as="geometry" />
         </mxCell>
 
         <mxCell id="localIndex"
-          value="&lt;b&gt;Local Indexes&lt;/b&gt;&lt;br&gt;FAISS + BM25 + PDF (read-only)"
-          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0e0e0;strokeColor=#666666;fontSize=11;"
+          value="&lt;b&gt;Local Indexes&lt;/b&gt;&lt;br&gt;FAISS + BM25&lt;br&gt;+ law PDF&lt;br&gt;(in image)"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;"
           vertex="1" parent="1">
-          <mxGeometry x="480" y="430" width="220" height="55" as="geometry" />
+          <mxGeometry x="715" y="300" width="135" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Certbot container -->
+        <mxCell id="certbotBox"
+          value="&lt;b&gt;Container: niti-certbot&lt;/b&gt; — renews SSL certificate"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;"
+          vertex="1" parent="1">
+          <mxGeometry x="445" y="440" width="420" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- nginx -> fastapi internal proxy -->
+        <mxCell id="e_nginx_fastapi"
+          value="proxy /api"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=classic;fontSize=9;strokeColor=#666666;exitX=0.25;exitY=1;entryX=0.25;entryY=0;"
+          edge="1" source="nginx" target="fastapi" parent="1">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
 
         <!-- ══════════════════════════════════════════
-             DATABASE (Neon)
+             EXTERNAL SERVICES (right column)
         ══════════════════════════════════════════ -->
-        <mxCell id="dbNode"
-          value="&lt;b&gt;«cloud»&lt;/b&gt;&lt;br&gt;Neon (Serverless PostgreSQL)"
-          style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;fontStyle=1;verticalAlign=top;spacingTop=8;"
+
+        <!-- Clerk -->
+        <mxCell id="clerkNode"
+          value="&lt;b&gt;«service» Clerk&lt;/b&gt;&lt;br&gt;Authentication&lt;br&gt;(Google sign-in, JWTs)"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;"
           vertex="1" parent="1">
-          <mxGeometry x="900" y="250" width="210" height="110" as="geometry" />
+          <mxGeometry x="1000" y="120" width="220" height="80" as="geometry" />
         </mxCell>
 
-        <mxCell id="dbCyl"
-          value="&lt;b&gt;Chat History DB&lt;/b&gt;&lt;br&gt;sessions · messages"
-          style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;"
-          vertex="1" parent="1">
-          <mxGeometry x="940" y="290" width="130" height="60" as="geometry" />
-        </mxCell>
-
-        <!-- ══════════════════════════════════════════
-             AI SERVICE (Vertex AI)
-        ══════════════════════════════════════════ -->
-        <mxCell id="aiNode"
-          value="&lt;b&gt;«cloud»&lt;/b&gt;&lt;br&gt;Google Vertex AI"
-          style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12;fontStyle=1;verticalAlign=top;spacingTop=8;"
-          vertex="1" parent="1">
-          <mxGeometry x="900" y="420" width="210" height="120" as="geometry" />
-        </mxCell>
-
-        <mxCell id="geminiSvc"
-          value="&lt;b&gt;Gemini 2.5 Flash&lt;/b&gt;&lt;br&gt;Gemini Embedding-001"
+        <!-- Vertex AI -->
+        <mxCell id="vertexNode"
+          value="&lt;b&gt;«service» Google Vertex AI&lt;/b&gt;&lt;br&gt;Gemini 2.5 Flash&lt;br&gt;Gemini Embedding-001"
           style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;"
           vertex="1" parent="1">
-          <mxGeometry x="925" y="460" width="160" height="60" as="geometry" />
+          <mxGeometry x="1000" y="240" width="220" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Neon DB -->
+        <mxCell id="neonNode"
+          value="&lt;b&gt;«service» Neon&lt;/b&gt;&lt;br&gt;Serverless PostgreSQL&lt;br&gt;(sessions, messages,&lt;br&gt;anonymous usage)"
+          style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;verticalAlign=middle;"
+          vertex="1" parent="1">
+          <mxGeometry x="1040" y="360" width="150" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Let's Encrypt -->
+        <mxCell id="leNode"
+          value="&lt;b&gt;«service»&lt;/b&gt;&lt;br&gt;Let's Encrypt CA"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;"
+          vertex="1" parent="1">
+          <mxGeometry x="1000" y="490" width="220" height="60" as="geometry" />
         </mxCell>
 
         <!-- ══════════════════════════════════════════
              CONNECTIONS
         ══════════════════════════════════════════ -->
 
-        <!-- Browser → React SPA (loads) -->
-        <mxCell id="c_browser_react"
-          value="HTTPS (loads SPA)"
-          style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=classic;strokeWidth=1.5;fontSize=10;"
-          edge="1" source="browser" target="reactApp" parent="1">
+        <!-- Browser -> DNS -->
+        <mxCell id="e_browser_dns"
+          value="resolve"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=classic;fontSize=10;exitX=0.5;exitY=1;entryX=0.5;entryY=0;"
+          edge="1" source="browser" target="dnsNode" parent="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
 
-        <!-- Browser → FastAPI (API calls / SSE) -->
-        <mxCell id="c_browser_api"
-          value="HTTPS / SSE&#10;(/api/* → :8000)"
-          style="edgeStyle=orthogonalEdgeStyle;rounded=0;startArrow=classic;endArrow=classic;strokeWidth=2;fontSize=10;"
-          edge="1" source="browser" target="fastapiApp" parent="1">
+        <!-- Browser -> Nginx (HTTPS) -->
+        <mxCell id="e_browser_nginx"
+          value="HTTPS&#10;(443)"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;startArrow=classic;endArrow=classic;strokeWidth=2;fontSize=11;fontStyle=1;"
+          edge="1" source="browser" target="nginxBox" parent="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="350" y="165" />
-              <mxPoint x="350" y="415" />
+              <mxPoint x="370" y="149" />
             </Array>
           </mxGeometry>
         </mxCell>
 
-        <!-- FastAPI → Neon DB -->
-        <mxCell id="c_api_db"
-          value="asyncpg (SQL)"
-          style="edgeStyle=orthogonalEdgeStyle;rounded=0;startArrow=classic;endArrow=classic;strokeWidth=1.5;fontSize=10;"
-          edge="1" source="fastapiApp" target="dbCyl" parent="1">
+        <!-- Browser -> Clerk (sign-in) -->
+        <mxCell id="e_browser_clerk"
+          value="sign-in / token"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;startArrow=classic;endArrow=classic;strokeColor=#6c8ebf;fontColor=#36577f;fontSize=10;exitX=1;exitY=0.2;entryX=0;entryY=0.5;"
+          edge="1" source="browser" target="clerkNode" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="955" y="135" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Backend -> Clerk (verify JWKS) -->
+        <mxCell id="e_backend_clerk"
+          value="verify JWT (JWKS)"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;endArrow=classic;strokeColor=#6c8ebf;fontColor=#36577f;fontSize=10;exitX=1;exitY=0.2;entryX=0;entryY=0.7;"
+          edge="1" source="fastapi" target="clerkNode" parent="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
 
-        <!-- FastAPI → Vertex AI -->
-        <mxCell id="c_api_ai"
-          value="HTTPS (LLM / Embedding API)"
-          style="edgeStyle=orthogonalEdgeStyle;rounded=0;startArrow=classic;endArrow=classic;strokeWidth=1.5;fontSize=10;strokeColor=#9673a6;fontColor=#6a3fa0;"
-          edge="1" source="fastapiApp" target="geminiSvc" parent="1">
+        <!-- Backend -> Vertex AI -->
+        <mxCell id="e_backend_vertex"
+          value="LLM + embedding API (HTTPS)"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;startArrow=classic;endArrow=classic;strokeColor=#9673a6;fontColor=#6a3fa0;fontSize=10;exitX=1;exitY=0.5;entryX=0;entryY=0.5;"
+          edge="1" source="fastapi" target="vertexNode" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Backend -> Neon -->
+        <mxCell id="e_backend_neon"
+          value="asyncpg (SQL/TLS)"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;startArrow=classic;endArrow=classic;strokeColor=#82b366;fontColor=#3a6b35;fontSize=10;exitX=1;exitY=0.8;entryX=0;entryY=0.5;"
+          edge="1" source="fastapi" target="neonNode" parent="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="800" y="490" />
+              <mxPoint x="940" y="385" />
             </Array>
           </mxGeometry>
+        </mxCell>
+
+        <!-- Certbot -> Let's Encrypt -->
+        <mxCell id="e_certbot_le"
+          value="ACME challenge"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;startArrow=classic;endArrow=classic;strokeColor=#b85450;fontColor=#8a3733;fontSize=10;exitX=1;exitY=0.5;entryX=0;entryY=0.5;"
+          edge="1" source="certbotBox" target="leNode" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ══ Legend ══ -->
+        <mxCell id="legend"
+          value="«device» = client hardware    «cloud» = cloud host    «service» = external managed service"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontStyle=2;fontColor=#666666;"
+          vertex="1" parent="1">
+          <mxGeometry x="80" y="540" width="700" height="20" as="geometry" />
         </mxCell>
 
       </root>

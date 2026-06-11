@@ -32,6 +32,15 @@ export const api = {
     return res.json()
   },
 
+  deleteSession: async (sessionId, token) => {
+    const res = await fetch(`${BASE_URL}/chat/${sessionId}`, {
+      method: 'DELETE',
+      headers: authHeaders(token),
+    })
+    if (!res.ok) throw new Error('Delete failed')
+    return res.json()
+  },
+
   getPDFUrl: (filename) => `${BASE_URL}/documents/${filename}`,
 
   streamChat: (message, sessionId, onEvent, token) => {

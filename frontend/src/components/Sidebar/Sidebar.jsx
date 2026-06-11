@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import Logo from '../../assets/Logo'
+import { useWindowWidth } from '../../hooks/useWindowWidth'
 
 const IconEdit = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -51,14 +52,27 @@ const IconMoon = () => (
   </svg>
 )
 
+const IconTrash = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="3 6 5 6 21 6"/>
+    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+    <path d="M10 11v6M14 11v6"/>
+    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+  </svg>
+)
+
 export default function Sidebar({
   sessions, activeSession,
-  onSelectSession, onNewSession,
+  onSelectSession, onNewSession, onDeleteSession,
   isOpen, onToggle,
   isDark, onToggleTheme,
 }) {
+  const width    = useWindowWidth()
+  const isMobile = width < 640
+
   const [search, setSearch]       = useState('')
   const [logoHover, setLogoHover] = useState(false)
+  const [hoveredId, setHoveredId] = useState(null)
   const searchRef                 = useRef(null)
 
   const h = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.06)'
@@ -94,18 +108,27 @@ export default function Sidebar({
     </div>
   )
 
+  // Always a fixed overlay — never takes space from the chat layout,
+  // so the chat window centers in the full viewport on every screen size.
+  const collapsedWidth = isMobile ? 0 : 64
+  const openWidth      = isMobile ? 280 : 260
+  const containerStyle = {
+    position: 'fixed',
+    left: 0, top: 0,
+    width: isOpen ? openWidth : collapsedWidth,
+    height: '100vh',
+    background: 'var(--bg)',
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+    transition: 'width .25s cubic-bezier(0.4,0,0.2,1)',
+    borderRight: isOpen ? '1px solid var(--border)' : 'none',
+    zIndex: 200,
+    boxShadow: isOpen ? '4px 0 24px rgba(0,0,0,0.15)' : 'none',
+  }
+
   return (
-    <div style={{
-      width: isOpen ? 260 : 64,
-      height: '100vh',
-      background: 'var(--bg)',
-      display: 'flex',
-      flexDirection: 'column',
-      flexShrink: 0,
-      overflow: 'hidden',
-      transition: 'width .25s cubic-bezier(0.4,0,0.2,1)',
-      borderRight: isOpen ? '1px solid var(--border)' : 'none',
-    }}>
+    <div style={containerStyle}>
 
       {/* Header */}
       <div style={{
@@ -238,20 +261,44 @@ export default function Sidebar({
                   background: activeSession === s.id ? 'rgba(186,236,23,0.15)' : 'transparent',
                   transition: 'background .15s', overflow: 'hidden',
                 }}
-                onMouseEnter={e => { if (activeSession !== s.id) e.currentTarget.style.background = h }}
-                onMouseLeave={e => { if (activeSession !== s.id) e.currentTarget.style.background = 'transparent' }}
+                onMouseEnter={e => {
+                  setHoveredId(s.id)
+                  if (activeSession !== s.id) e.currentTarget.style.background = h
+                }}
+                onMouseLeave={e => {
+                  setHoveredId(null)
+                  if (activeSession !== s.id) e.currentTarget.style.background = 'transparent'
+                }}
               >
                 <div style={{
                   width: 6, height: 6, borderRadius: '50%', flexShrink: 0,
                   background: activeSession === s.id ? '#A8D414' : 'var(--text-muted)',
                 }} />
                 {isOpen && (
-                  <div style={{ minWidth: 0, flex: 1 }}>
-                    <div style={{ fontSize: 13, color: 'var(--text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      {s.title}
+                  <>
+                    <div style={{ minWidth: 0, flex: 1 }}>
+                      <div style={{ fontSize: 13, color: 'var(--text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {s.title}
+                      </div>
+                      <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 1 }}>{s.time}</div>
                     </div>
-                    <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 1 }}>{s.time}</div>
-                  </div>
+                    {hoveredId === s.id && onDeleteSession && (
+                      <button
+                        onClick={e => { e.stopPropagation(); onDeleteSession(s.id) }}
+                        title="លុបការសន្ទនា"
+                        style={{
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          width: 24, height: 24, borderRadius: 6, flexShrink: 0,
+                          background: 'none', border: 'none', cursor: 'pointer',
+                          color: 'var(--text-muted)', transition: 'color .15s, background .15s',
+                        }}
+                        onMouseEnter={e => { e.currentTarget.style.color = '#ef4444'; e.currentTarget.style.background = 'rgba(239,68,68,0.1)' }}
+                        onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.background = 'none' }}
+                      >
+                        <IconTrash />
+                      </button>
+                    )}
+                  </>
                 )}
               </div>
             ))

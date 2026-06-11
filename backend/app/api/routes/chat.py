@@ -281,6 +281,25 @@ async def list_sessions(
     }
 
 
+@router.delete("/chat/{session_id}")
+async def delete_session(
+    session_id: str,
+    conn:    asyncpg.Connection = Depends(get_db),
+    user_id: str | None         = Depends(get_optional_user_id),
+):
+    """Delete a session and all its messages (owner-only)."""
+    owner = await conn.fetchval(
+        "SELECT user_id FROM chat_sessions WHERE session_id = $1", session_id
+    )
+    if owner is None:
+        raise HTTPException(status_code=404, detail="Session not found")
+    if owner != user_id:
+        raise HTTPException(status_code=403, detail="Not your session")
+
+    await conn.execute("DELETE FROM chat_sessions WHERE session_id = $1", session_id)
+    return {"deleted": session_id}
+
+
 @router.get("/chat/{session_id}/history")
 async def get_history(
     session_id: str,
