@@ -16,7 +16,7 @@ from agents.orchestrator import agent_graph
 router = APIRouter(tags=["chat"])
 
 # ── Anonymous free-tier quota ─────────────────────────────────────────────────
-ANON_QUESTION_LIMIT = 3
+ANON_QUESTION_LIMIT = 2
 ANON_COOKIE         = "niti_anon_id"
 ANON_COOKIE_MAX_AGE = 60 * 60 * 24 * 365   # 1 year
 
@@ -202,7 +202,7 @@ async def chat(
     if len(request.message) > 4000:
         raise HTTPException(status_code=400, detail="Message too long")
 
-    # ── Anonymous quota: 3 free questions, then require sign-in ──
+    # ── Anonymous quota: 2 free questions, then require sign-in ──
     anon_id: str | None = None
     if user_id is None:
         anon_id = http_request.cookies.get(ANON_COOKIE) or str(uuid.uuid4())
@@ -296,7 +296,13 @@ async def delete_session(
     if owner != user_id:
         raise HTTPException(status_code=403, detail="Not your session")
 
-    await conn.execute("DELETE FROM chat_sessions WHERE session_id = $1", session_id)
+    # Delete messages explicitly before the session. On older deployments the
+    # chat_messages FK was created without ON DELETE CASCADE, so a bare session
+    # delete fails with a foreign-key violation whenever history exists — which
+    # left the row visibly "deleted" in the UI but still present in the database.
+    async with conn.transaction():
+        await conn.execute("DELETE FROM chat_messages WHERE session_id = $1", session_id)
+        await conn.execute("DELETE FROM chat_sessions WHERE session_id = $1", session_id)
     return {"deleted": session_id}
 
 

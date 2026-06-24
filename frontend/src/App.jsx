@@ -53,7 +53,12 @@ export default function App({ getToken = null, isSignedIn = false, onRequireSign
     const token = await getToken()
     try {
       await api.deleteSession(id, token)
-    } catch { /* ignore if already gone */ }
+    } catch (err) {
+      // Don't hide the failure: removing it from the UI anyway makes the row
+      // look deleted while it survives in the database and returns on reload.
+      console.error('Failed to delete session:', err)
+      return
+    }
     setSessions(prev => prev.filter(s => s.id !== id))
     if (activeSession === id) {
       await chat.newSession()
